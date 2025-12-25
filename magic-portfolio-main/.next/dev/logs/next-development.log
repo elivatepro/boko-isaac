@@ -1,0 +1,7 @@
+[04:35:07.309] Server  ERROR   ⨯ Error: Cannot find module 'next/dist/client/components/builtin/global-not-found'
+Require stack:
+- /Users/bokox/Programs - Boko X/Boko Isaac Website/magic-portfolio-main/node_modules/next/dist/server/dev/on-demand-entry-handler.js
+- /Users/bokox/Programs - Boko X/Boko Isaac Website/magic-portfolio-main/node_modules/next/dist/server/dev/hot-reloader-turbopack.js
+- /Users/bokox/Programs - Boko X/Boko Isaac Website/magic-portfolio-main/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/bokox/Programs - Boko X/Boko Isaac Website/magic-portfolio-main/node_modules/next/dist/server/lib/router-server.js
+- /Users/bokox/Programs - Boko X/Boko Isaac Website/magic-portfolio-main/node_modules/next/dist/server/lib/start-server.js
