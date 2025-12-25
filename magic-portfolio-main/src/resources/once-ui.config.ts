@@ -11,7 +11,6 @@ import {
   SocialSharingConfig,
   StyleConfig,
 } from "@/types";
-import { home } from "./index";
 
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
 const baseURL: string = "https://demo.magic-portfolio.com";
@@ -189,8 +188,8 @@ const schema: SchemaConfig = {
   logo: "",
   type: "Organization",
   name: "Once UI",
-  description: home.description,
-  email: "lorant@once-ui.com",
+  description: "Portfolio website showcasing my work as a Software Developer & Systems Architect",
+  email: "boko@elivate.io",
 };
 
 // social links
