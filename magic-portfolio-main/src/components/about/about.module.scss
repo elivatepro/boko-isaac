@@ -1,0 +1,50 @@
+@use "../breakpoints.scss" as breakpoints;
+
+.hover {
+    transition: var(--transition-micro-medium);
+
+    &:hover {
+        transform: translateX(var(--static-space-4));
+    }
+}
+
+@media (max-width: breakpoints.$s) {
+    .textAlign {
+        text-align: center;
+    }
+
+    .blockAlign {
+        align-self: center;
+    }
+}
+
+.avatarWrapper {
+    position: relative;
+    display: inline-flex;
+    width: fit-content;
+    height: fit-content;
+}
+
+.statusDot {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--positive-strong, #26c96e);
+    z-index: 1;
+    box-shadow:
+        0 0 0 3px var(--page-background),
+        0 0 12px var(--positive-strong, #26c96e);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
