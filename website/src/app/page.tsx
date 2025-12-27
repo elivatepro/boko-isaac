@@ -77,13 +77,13 @@ export default function Home() {
             </Text>
           </RevealFx>
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
-            <Row gap="12" horizontal="center">
+            <Row gap="12" horizontal="center" wrap>
               <Button
                 id="about"
                 data-border="rounded"
                 href={about.path}
                 variant="secondary"
-                size="m"
+                size="s"
                 weight="default"
                 arrowIcon
               >
@@ -92,12 +92,12 @@ export default function Home() {
                     <div className={styles.avatarWrapper} style={{ marginLeft: "-0.75rem", marginRight: "8px" }} aria-label="Active status: online">
                       <Avatar
                         src={person.avatar}
-                        size="m"
+                        size="s"
                       />
                       <span aria-hidden className={styles.statusDot} />
                     </div>
                   )}
-                  {about.title}
+                  About
                 </Row>
               </Button>
               <Button
@@ -105,22 +105,22 @@ export default function Home() {
                 data-border="rounded"
                 href={`${about.path}#My Philosophy`}
                 variant="secondary"
-                size="m"
+                size="s"
                 weight="default"
                 arrowIcon
               >
-                My Philosophy
+                Philosophy
               </Button>
               <Button
                 id="services-cta"
                 data-border="rounded"
                 href="/services"
                 variant="primary"
-                size="m"
+                size="s"
                 weight="strong"
                 arrowIcon
               >
-                Services & Pricing
+                Services
               </Button>
             </Row>
           </RevealFx>
