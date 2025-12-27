@@ -1,16 +1,16 @@
-# Magic Portfolio
+# Boko Portfolio
 
-Magic Portfolio is a simple, clean, beginner-friendly portfolio template. It supports an MDX-based content system for projects and blog posts, an about / CV page and a gallery.
+Boko Portfolio is a simple, clean, beginner-friendly portfolio template. It supports an MDX-based content system for projects and blog posts, an about / CV page and a gallery.
 
-View the demo [here](https://demo.magic-portfolio.com).
+View the demo [here](https://demo.boko-portfolio.com).
 
-![Magic Portfolio](public/images/og/home.jpg)
+![Boko Portfolio](public/images/og/home.jpg)
 
 ## Getting started
 
 **1. Clone the repository**
 ```
-git clone https://github.com/once-ui-system/magic-portfolio.git
+git clone https://github.com/once-ui-system/boko-portfolio.git
 ```
 
 **2. Install dependencies**
@@ -38,11 +38,11 @@ src/resources/content.js
 Add a new .mdx file to src/app/blog/posts or src/app/work/projects
 ```
 
-Magic Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
+Boko Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
 
 ## Documentation
 
-Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
+Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/boko-portfolio/quick-start)
 
 ## Features
 
@@ -65,7 +65,7 @@ Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfo
 - Set up password protection for URLs
 
 ### Localization
-- A localized, earlier version of Magic Portfolio is available with the next-intl library
+- A localized, earlier version of Boko Portfolio is available with the next-intl library
 - To use localization, switch to the 'i18n' branch
 
 ## Creators
@@ -88,4 +88,4 @@ See `LICENSE.txt` for more information.
 
 ## Deploy with Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&demo-title=Magic%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fboko-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fboko-portfolio&demo-title=Boko%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.boko-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fboko-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)

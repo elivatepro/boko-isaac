@@ -85,12 +85,18 @@ export const QuoteRequestForm: React.FC<React.ComponentProps<typeof Column>> = (
     setIsSubmitting(true);
 
     try {
-      // TODO: Replace with your actual form submission endpoint
-      // For now, we'll just log and show success
-      console.log("Quote request submitted:", formData);
+      // Send form data to our API route which forwards to Zoho webhook
+      const response = await fetch("/api/quote-request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        throw new Error("Failed to submit form");
+      }
 
       setSubmitStatus("success");
       setFormData({
