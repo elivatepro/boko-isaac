@@ -259,3 +259,181 @@ export interface Gallery extends BasePageConfig {
     orientation: string;
   }>;
 }
+
+/**
+ * Services page configuration.
+ * @description Configuration for the Services page, including hero, process steps, service offerings, and examples.
+ */
+export interface Services extends BasePageConfig {
+  /** Hero section */
+  hero: {
+    /** Main headline */
+    headline: React.ReactNode;
+    /** Subheadline */
+    subline: React.ReactNode;
+  };
+  /** Process section */
+  process: {
+    /** Whether to display the process section */
+    display: boolean;
+    /** Section title */
+    title: string;
+    /** Process steps */
+    steps: Array<{
+      /** Step number */
+      number: number;
+      /** Step title */
+      title: string;
+      /** Step description */
+      description: React.ReactNode;
+      /** Step icon or emoji */
+      icon: string;
+    }>;
+  };
+  /** Service offerings section */
+  offerings: {
+    /** Whether to display offerings */
+    display: boolean;
+    /** Section title */
+    title: string;
+    /** List of services */
+    services: Array<{
+      /** Service title */
+      title: string;
+      /** Service description */
+      description: React.ReactNode;
+      /** Service icon or emoji */
+      icon: string;
+      /** Technology tags */
+      tags?: string[];
+      /** Example use cases */
+      examples?: string[];
+    }>;
+  };
+  /** Example projects section */
+  examples: {
+    /** Whether to display examples */
+    display: boolean;
+    /** Section title */
+    title: string;
+    /** Section subtitle */
+    subtitle?: React.ReactNode;
+  };
+}
+
+/**
+ * Pricing page configuration.
+ * @description Configuration for the Pricing page, including story points, retainers, example projects, and blueprint sessions.
+ */
+export interface Pricing extends BasePageConfig {
+  /** Hero section */
+  hero: {
+    /** Main headline */
+    headline: React.ReactNode;
+    /** Subheadline */
+    subline: React.ReactNode;
+  };
+  /** Story points pricing section */
+  storyPoints: {
+    /** Whether to display story points */
+    display: boolean;
+    /** Section title */
+    title: string;
+    /** Section description */
+    description: React.ReactNode;
+    /** Pricing tiers */
+    tiers: Array<{
+      /** Story point range (e.g., "1-50 SP") */
+      range: string;
+      /** Rate per story point */
+      ratePerSP: number;
+      /** Tier description */
+      description?: string;
+    }>;
+  };
+  /** Retainer packages section */
+  retainers: {
+    /** Whether to display retainers */
+    display: boolean;
+    /** Section title */
+    title: string;
+    /** Section description */
+    description?: React.ReactNode;
+    /** Retainer packages */
+    packages: Array<{
+      /** Package name */
+      name: string;
+      /** Hours per month */
+      hours: number;
+      /** Rate per hour */
+      ratePerHour: number;
+      /** Package features */
+      features: string[];
+      /** Whether this is the recommended package */
+      recommended?: boolean;
+    }>;
+  };
+  /** Example projects section */
+  exampleProjects: {
+    /** Whether to display example projects */
+    display: boolean;
+    /** Section title */
+    title: string;
+    /** List of example projects */
+    projects: Array<{
+      /** Project name */
+      name: string;
+      /** Project description */
+      description: React.ReactNode;
+      /** Story points range */
+      storyPoints: string;
+      /** Price range */
+      priceRange: string;
+      /** List of deliverables */
+      deliverables: string[];
+    }>;
+  };
+  /** Blueprint sessions section */
+  blueprintSessions: {
+    /** Whether to display blueprint sessions */
+    display: boolean;
+    /** Section title */
+    title: string;
+    /** Section description */
+    description: React.ReactNode;
+    /** Session duration */
+    duration: string;
+    /** Session price */
+    price: string;
+  };
+}
+
+/**
+ * Testimonial configuration.
+ * @description Configuration for client testimonials and social proof.
+ */
+export interface Testimonials {
+  /** Whether to display testimonials */
+  display: boolean;
+  /** Section title */
+  title: string;
+  /** Overall rating (e.g., 4.80) */
+  overallRating: number;
+  /** Total number of reviews */
+  totalReviews: number;
+  /** List of testimonials */
+  items: Array<{
+    /** Client name */
+    name: string;
+    /** Client role/position */
+    role?: string;
+    /** Client company */
+    company?: string;
+    /** Avatar image path */
+    avatar?: string;
+    /** Testimonial content */
+    content: string;
+    /** Rating (1-5) */
+    rating: number;
+  }>;
+}

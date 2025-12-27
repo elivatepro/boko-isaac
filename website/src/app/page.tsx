@@ -11,8 +11,8 @@ import {
   Meta,
   Line,
 } from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
-import { QuoteRequestForm } from "@/components";
+import { home, about, person, baseURL, routes, testimonials } from "@/resources";
+import { QuoteRequestForm, Testimonials } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 import styles from "./page.module.scss";
@@ -111,6 +111,17 @@ export default function Home() {
               >
                 My Philosophy
               </Button>
+              <Button
+                id="services-cta"
+                data-border="rounded"
+                href="/services"
+                variant="primary"
+                size="m"
+                weight="strong"
+                arrowIcon
+              >
+                Services & Pricing
+              </Button>
             </Row>
           </RevealFx>
         </Column>
@@ -139,6 +150,21 @@ export default function Home() {
         </Column>
       )}
       <Projects range={[2]} />
+
+      {/* Testimonials */}
+      {testimonials.display && (
+        <Column fillWidth gap="24" marginTop="xl">
+          <Heading as="h2" variant="display-strong-s" align="center">
+            {testimonials.title}
+          </Heading>
+          <Testimonials
+            testimonials={testimonials.items}
+            overallRating={testimonials.overallRating}
+            totalReviews={testimonials.totalReviews}
+          />
+        </Column>
+      )}
+
       <QuoteRequestForm />
     </Column>
   );

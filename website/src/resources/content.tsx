@@ -1,4 +1,4 @@
-import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
+import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work, Services, Pricing, Testimonials } from "@/types";
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -409,4 +409,370 @@ const gallery: Gallery = {
   ],
 };
 
-export { person, social, newsletter, home, about, blog, work, gallery };
+const services: Services = {
+  path: "/services",
+  label: "Services",
+  title: `Services & Pricing – ${person.name}`,
+  description: "Full-stack development and systems architecture consulting with transparent pricing",
+  image: "/images/og/services.jpg",
+
+  hero: {
+    headline: <>Turn chaos into systems that scale</>,
+    subline: <>I build ERPs, CRMs, custom applications, and automation workflows that help businesses operate smoothly. From idea to deployment, I handle the technical complexity so you can focus on growth.</>,
+  },
+
+  process: {
+    display: true,
+    title: "How I Work",
+    steps: [
+      {
+        number: 1,
+        title: "Blueprint Session (FREE)",
+        description: <>
+          We start with a 30-minute call where you brain-dump your challenges
+          and I ask clarifying questions. By the end, you'll have clarity on
+          what's possible—even if you don't hire me.
+        </>,
+        icon: "📋",
+      },
+      {
+        number: 2,
+        title: "Scope & Estimate",
+        description: <>
+          I analyze your requirements, estimate complexity in story points,
+          and provide transparent pricing. You'll know exactly what you're
+          getting and what it costs before we begin.
+        </>,
+        icon: "📊",
+      },
+      {
+        number: 3,
+        title: "Build & Iterate",
+        description: <>
+          I design, develop, and deploy your solution using modern tools and
+          frameworks. You get regular updates, working prototypes, and direct
+          communication—no middlemen, no surprises.
+        </>,
+        icon: "🏗️",
+      },
+      {
+        number: 4,
+        title: "Deliver & Support",
+        description: <>
+          You receive complete code ownership, documentation, training materials,
+          and ongoing support options. Your system is yours to scale, modify,
+          or hand off to another team.
+        </>,
+        icon: "🚀",
+      },
+    ],
+  },
+
+  offerings: {
+    display: true,
+    title: "What I Build",
+    services: [
+      {
+        title: "ERP Implementation & Consulting",
+        description: <>
+          Design and implement business systems that connect inventory, sales,
+          finance, and operations. I specialize in Zoho One ecosystems and
+          custom-built ERPs tailored to your workflows.
+        </>,
+        icon: "🏢",
+        tags: ["Zoho One", "Custom ERP", "Business Process Optimization"],
+        examples: [
+          "Multi-warehouse inventory management",
+          "Automated order-to-invoice workflows",
+          "Real-time dashboards and reporting",
+        ],
+      },
+      {
+        title: "Custom Software Development",
+        description: <>
+          Build web applications, internal tools, and customer-facing platforms
+          from scratch. I handle frontend, backend, databases, and deployment
+          to deliver production-ready solutions.
+        </>,
+        icon: "💻",
+        tags: ["Next.js", "React", "Node.js", "PostgreSQL"],
+        examples: [
+          "Booking platforms with payment integration",
+          "Client portals and dashboards",
+          "Admin panels and data management tools",
+        ],
+      },
+      {
+        title: "CRM Implementation",
+        description: <>
+          Set up and customize CRM systems like GoHighLevel to automate lead
+          capture, nurture sequences, and sales pipelines. Get campaigns,
+          automations, and integrations working seamlessly.
+        </>,
+        icon: "📈",
+        tags: ["GoHighLevel", "Zoho CRM", "HubSpot"],
+        examples: [
+          "Multi-stage sales pipeline automation",
+          "Email & SMS campaign sequences",
+          "Lead scoring and attribution tracking",
+        ],
+      },
+      {
+        title: "AI & Automation Solutions",
+        description: <>
+          Implement AI-powered workflows for document processing, data extraction,
+          chatbots, and intelligent decision-making. I use OpenAI, Anthropic,
+          and custom models to solve real business problems.
+        </>,
+        icon: "🤖",
+        tags: ["OpenAI API", "Claude API", "Document AI", "Workflow Automation"],
+        examples: [
+          "Invoice and receipt data extraction",
+          "Customer support chatbots",
+          "Automated report generation",
+        ],
+      },
+      {
+        title: "Low-Code Platform Development",
+        description: <>
+          Build applications using low-code platforms like Bubble, Softr, and
+          Retool when speed and flexibility matter more than custom code.
+          Perfect for MVPs and rapid iteration.
+        </>,
+        icon: "⚡",
+        tags: ["Bubble.io", "Softr", "Retool", "Airtable"],
+        examples: [
+          "MVP product launches in weeks",
+          "Internal admin tools and dashboards",
+          "Client-facing portals and directories",
+        ],
+      },
+    ],
+  },
+
+  examples: {
+    display: true,
+    title: "Recent Projects",
+    subtitle: <>Real examples from my portfolio—see the full case studies for details.</>,
+  },
+};
+
+const pricing: Pricing = {
+  path: "/pricing",
+  label: "Pricing",
+  title: `Pricing – ${person.name}`,
+  description: "Transparent pricing for development and consulting services",
+  image: "/images/og/pricing.jpg",
+
+  hero: {
+    headline: <>Transparent pricing. No surprises.</>,
+    subline: <>I use story points for project-based work and hourly retainers for ongoing support. Everything is scoped upfront, so you know exactly what you're paying for before we start.</>,
+  },
+
+  storyPoints: {
+    display: true,
+    title: "Story Point Model",
+    description: <>
+      I estimate projects in story points (SP)—a measure of complexity,
+      not hours. A simple feature might be 5 SP, while a full platform
+      could be 200+ SP. After our Blueprint Session, I'll provide a detailed
+      estimate and transparent pricing based on these tiers:
+    </>,
+    tiers: [
+      {
+        range: "1-50 SP",
+        ratePerSP: 150,
+        description: "Small features, integrations, and focused builds",
+      },
+      {
+        range: "51-200 SP",
+        ratePerSP: 125,
+        description: "Full systems, multi-feature platforms, complex workflows",
+      },
+      {
+        range: "200+ SP",
+        ratePerSP: 100,
+        description: "Enterprise rollouts, comprehensive solutions, long-term projects",
+      },
+    ],
+  },
+
+  retainers: {
+    display: true,
+    title: "Retainer Consulting",
+    description: <>
+      Prefer ongoing support? Lock in monthly hours for maintenance,
+      feature development, and strategic guidance. Retainers include
+      priority response times and flexible scheduling.
+    </>,
+    packages: [
+      {
+        name: "Part-Time Support",
+        hours: 10,
+        ratePerHour: 150,
+        features: [
+          "Bug fixes and maintenance",
+          "2-3 day response time",
+          "Monthly check-in calls",
+          "Email and Slack support",
+        ],
+      },
+      {
+        name: "Active Development",
+        hours: 20,
+        ratePerHour: 140,
+        features: [
+          "New features and enhancements",
+          "1 business day response time",
+          "Weekly progress updates",
+          "Priority Slack access",
+        ],
+        recommended: true,
+      },
+      {
+        name: "Dedicated Partnership",
+        hours: 40,
+        ratePerHour: 130,
+        features: [
+          "Embedded team member experience",
+          "Same-day response time",
+          "Daily Slack availability",
+          "Strategic planning sessions",
+        ],
+      },
+    ],
+  },
+
+  exampleProjects: {
+    display: true,
+    title: "What Things Actually Cost",
+    projects: [
+      {
+        name: "CRM Implementation (GoHighLevel)",
+        description: <>
+          Set up pipelines, automations, landing pages, and email/SMS campaigns.
+          Includes training and documentation for your team.
+        </>,
+        storyPoints: "25-40 SP",
+        priceRange: "$3,750-$6,000",
+        deliverables: [
+          "Configured CRM with custom fields",
+          "10+ automated workflows",
+          "Email & SMS campaign templates",
+          "Training documentation",
+        ],
+      },
+      {
+        name: "Custom Automation Workflow",
+        description: <>
+          Build API integrations, data syncing, and automated processes
+          between your tools (e.g., Stripe → Zoho → QuickBooks sync).
+        </>,
+        storyPoints: "30-50 SP",
+        priceRange: "$4,500-$7,500",
+        deliverables: [
+          "Custom API integration",
+          "Error handling & logging",
+          "Automated data sync",
+          "Monitoring dashboard",
+        ],
+      },
+      {
+        name: "Low-Code Platform Build",
+        description: <>
+          Full application built on Bubble, Softr, or Retool with custom
+          workflows, user authentication, and database design.
+        </>,
+        storyPoints: "50-100 SP",
+        priceRange: "$7,500-$12,500",
+        deliverables: [
+          "Production-ready application",
+          "User authentication & permissions",
+          "Database schema design",
+          "Responsive UI/UX",
+        ],
+      },
+      {
+        name: "Enterprise Business System",
+        description: <>
+          Comprehensive ERP or custom platform with inventory, sales,
+          finance, reporting, and multi-user access. Fully custom-built.
+        </>,
+        storyPoints: "200+ SP",
+        priceRange: "$20,000+",
+        deliverables: [
+          "Full system architecture",
+          "Multi-module integration",
+          "Role-based access control",
+          "Comprehensive documentation",
+          "Training and handoff",
+        ],
+      },
+    ],
+  },
+
+  blueprintSessions: {
+    display: true,
+    title: "Blueprint Sessions",
+    description: <>
+      Book a FREE 30-minute Blueprint Session to discuss your project.
+      I'll help you clarify requirements, explore solutions, and provide
+      an initial scope estimate—whether you hire me or not.
+    </>,
+    duration: "30 minutes",
+    price: "FREE",
+  },
+};
+
+const testimonials: Testimonials = {
+  display: true,
+  title: "Loved by many",
+  overallRating: 4.80,
+  totalReviews: 24,
+  items: [
+    {
+      name: "David Chen",
+      role: "CEO",
+      company: "TradeFlex Imports",
+      content: "Boko transformed our chaotic operations into a streamlined ERP system. What used to take hours now takes minutes. The ROI was visible within the first month.",
+      rating: 5,
+    },
+    {
+      name: "Sarah Mitchell",
+      role: "Founder",
+      company: "GlowBook Studios",
+      content: "The booking platform Boko built exceeded all expectations. Our clients love the seamless experience, and our no-show rate dropped by 60%.",
+      rating: 5,
+    },
+    {
+      name: "Michael Okonkwo",
+      role: "Operations Director",
+      company: "LogiCore Solutions",
+      content: "Working with Boko was refreshingly straightforward. Clear communication, transparent pricing, and delivered exactly what was promised. Rare in this industry.",
+      rating: 5,
+    },
+    {
+      name: "Jennifer Park",
+      role: "Marketing Director",
+      company: "Bloom Agency",
+      content: "The CRM automation Boko set up saves our team 20+ hours per week. Lead nurturing that used to fall through the cracks is now completely automated.",
+      rating: 5,
+    },
+    {
+      name: "Thomas Adebayo",
+      role: "Founder",
+      company: "QuickServe Logistics",
+      content: "From messy spreadsheets to a custom dashboard that shows everything in real-time. Boko understood our problems before we finished explaining them.",
+      rating: 4,
+    },
+    {
+      name: "Amanda Foster",
+      role: "COO",
+      company: "HealthBridge Clinics",
+      content: "The document processing AI Boko implemented cut our intake time by 70%. Patients are happier, staff is happier, everyone wins.",
+      rating: 5,
+    },
+  ],
+};
+
+export { person, social, newsletter, home, about, blog, work, gallery, services, pricing, testimonials };

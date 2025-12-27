@@ -1,0 +1,90 @@
+.ratingCard {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--neutral-alpha-medium);
+}
+
+.animatedBackground {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, var(--brand-alpha-weak) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, var(--accent-alpha-weak) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, var(--brand-alpha-weak) 0%, transparent 30%);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.animatedBackground::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--brand-alpha-medium) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: drift 20s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(20px, 20px);
+  }
+}
+
+.carousel {
+  display: flex;
+  gap: 16px;
+  animation: scroll 30s linear infinite;
+  width: max-content;
+}
+
+.carousel:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.testimonialCard {
+  min-width: 300px;
+  max-width: 300px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonialCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px var(--neutral-alpha-weak);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .carousel {
+    animation-duration: 20s;
+  }
+
+  .testimonialCard {
+    min-width: 280px;
+    max-width: 280px;
+  }
+}
