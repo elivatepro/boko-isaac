@@ -8,20 +8,19 @@ interface CalEmbedProps {
   children?: React.ReactNode;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const window: any;
+
 export function CalEmbed({ calLink, children }: CalEmbedProps) {
   const [isReady, setIsReady] = useState(false);
   const calUsername = calLink.replace("https://cal.com/", "");
 
   useEffect(() => {
-    // Create Cal namespace
-    (function (C, A, L) {
-      // @ts-expect-error Cal embed
-      const p = function (a, ar) { a.q.push(ar); };
-      // @ts-expect-error Cal embed
+    // Create Cal namespace using official embed code
+    (function (C: any, A: string, L: string) {
+      const p = function (a: any, ar: any) { a.q.push(ar); };
       const d = C.document;
-      // @ts-expect-error Cal embed
       C.Cal = C.Cal || function () {
-        // @ts-expect-error Cal embed
         const cal = C.Cal;
         const ar = arguments;
         if (!cal.loaded) {
@@ -31,9 +30,7 @@ export function CalEmbed({ calLink, children }: CalEmbedProps) {
           cal.loaded = true;
         }
         if (ar[0] === L) {
-          // @ts-expect-error Cal embed
           const api = function () { p(api, arguments); };
-          // @ts-expect-error Cal embed
           const namespace = ar[1];
           api.q = api.q || [];
           if (typeof namespace === "string") {
@@ -47,13 +44,10 @@ export function CalEmbed({ calLink, children }: CalEmbedProps) {
         }
         p(cal, ar);
       };
-    // @ts-expect-error Cal embed
     })(window, "https://app.cal.com/embed/embed.js", "init");
 
-    // @ts-expect-error Cal embed
     window.Cal("init", { origin: "https://cal.com" });
 
-    // @ts-expect-error Cal embed
     window.Cal("ui", {
       theme: "dark",
       styles: { branding: { brandColor: "#00b4d8" } },
@@ -66,7 +60,6 @@ export function CalEmbed({ calLink, children }: CalEmbedProps) {
   const openCalModal = () => {
     if (!isReady) return;
 
-    // @ts-expect-error Cal embed
     window.Cal("modal", {
       calLink: calUsername,
       config: {
