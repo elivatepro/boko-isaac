@@ -13,17 +13,16 @@ export function CalEmbed({ calLink, children }: CalEmbedProps) {
   const calUsername = calLink.replace("https://cal.com/", "");
 
   useEffect(() => {
-    const win = window as Record<string, unknown>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const win = window as any;
 
-    // Load Cal.com script
     if (!win.Cal) {
       const script = document.createElement("script");
       script.src = "https://app.cal.com/embed/embed.js";
       script.async = true;
       script.onload = () => {
-        const Cal = win.Cal as (action: string, config?: unknown) => void;
-        Cal("init", { origin: "https://cal.com" });
-        Cal("ui", {
+        win.Cal("init", { origin: "https://cal.com" });
+        win.Cal("ui", {
           theme: "dark",
           styles: { branding: { brandColor: "#00b4d8" } },
           hideEventTypeDetails: false,
@@ -37,11 +36,11 @@ export function CalEmbed({ calLink, children }: CalEmbedProps) {
   }, []);
 
   const openCalModal = () => {
-    const win = window as Record<string, unknown>;
-    const Cal = win.Cal as (action: string, config?: unknown) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const win = window as any;
 
-    if (Cal) {
-      Cal("modal", {
+    if (win.Cal) {
+      win.Cal("modal", {
         calLink: calUsername,
         config: {
           layout: "month_view",
