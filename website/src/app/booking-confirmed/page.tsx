@@ -3,7 +3,6 @@ import {
   Heading,
   Text,
   Button,
-  Icon,
   Row,
   Meta,
   RevealFx,
@@ -24,22 +23,22 @@ export async function generateMetadata() {
 export default function BookingConfirmed() {
   const preparationTips = [
     {
-      icon: "target",
+      emoji: "🎯",
       title: "Define Your Challenge",
       description: "Think about the biggest operational pain point you want to solve. The clearer you can describe it, the more value we'll extract from our time.",
     },
     {
-      icon: "tool",
+      emoji: "🛠️",
       title: "List Your Current Tools",
       description: "Jot down the software and systems you're using today—spreadsheets, CRMs, accounting tools, anything relevant.",
     },
     {
-      icon: "chart",
+      emoji: "📊",
       title: "Know Your Numbers",
       description: "How much time does this problem cost you weekly? What would solving it be worth? These help me understand the ROI potential.",
     },
     {
-      icon: "question",
+      emoji: "❓",
       title: "Prepare Questions",
       description: "About timelines, pricing, technical approach—anything you want clarity on. No question is too basic.",
     },
@@ -71,13 +70,13 @@ export default function BookingConfirmed() {
           <Row
             padding="20"
             radius="full"
-            background="success-alpha-weak"
-            border="success-alpha-medium"
+            background="brand-alpha-weak"
+            border="brand-alpha-medium"
             style={{
               backdropFilter: "blur(var(--static-space-1))",
             }}
           >
-            <Icon name="check" size="xl" onBackground="success-strong" />
+            <Text style={{ fontSize: "48px", lineHeight: 1 }}>🎉</Text>
           </Row>
         </RevealFx>
 
@@ -204,7 +203,7 @@ export default function BookingConfirmed() {
                   background="brand-alpha-weak"
                   style={{ flexShrink: 0 }}
                 >
-                  <Icon name={tip.icon} size="m" onBackground="brand-strong" />
+                  <Text style={{ fontSize: "24px", lineHeight: 1 }}>{tip.emoji}</Text>
                 </Row>
                 <Column gap="4" flex={1}>
                   <Text variant="heading-strong-m">{tip.title}</Text>
@@ -242,25 +241,25 @@ export default function BookingConfirmed() {
 
           <Column gap="16" style={{ maxWidth: "600px", margin: "0 auto" }}>
             <Row gap="12" vertical="start">
-              <Icon name="check" onBackground="success-strong" style={{ marginTop: "4px" }} />
+              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
               <Text variant="body-default-l">
                 <strong>Honest assessment</strong> — I'll tell you what's realistic and what's not, even if it means recommending a different approach.
               </Text>
             </Row>
             <Row gap="12" vertical="start">
-              <Icon name="check" onBackground="success-strong" style={{ marginTop: "4px" }} />
+              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
               <Text variant="body-default-l">
                 <strong>Clear next steps</strong> — Whether we work together or not, you'll leave with actionable insights.
               </Text>
             </Row>
             <Row gap="12" vertical="start">
-              <Icon name="check" onBackground="success-strong" style={{ marginTop: "4px" }} />
+              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
               <Text variant="body-default-l">
                 <strong>No pressure</strong> — This is a discovery call, not a sales pitch. My goal is to help you make the right decision.
               </Text>
             </Row>
             <Row gap="12" vertical="start">
-              <Icon name="check" onBackground="success-strong" style={{ marginTop: "4px" }} />
+              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
               <Text variant="body-default-l">
                 <strong>Scope estimate</strong> — If your project is a fit, I'll provide a rough estimate of complexity and cost.
               </Text>
