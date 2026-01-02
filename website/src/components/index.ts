@@ -23,3 +23,6 @@ export { HeroSection } from "@/components/services/HeroSection";
 
 // Testimonials
 export { Testimonials } from "@/components/testimonials/Testimonials";
+
+// Cal.com
+export { CalEmbed } from "@/components/CalEmbed";

@@ -8,6 +8,7 @@ import {
   RevealFx,
   Avatar,
   Line,
+  Icon,
 } from "@once-ui-system/core";
 import { baseURL, person, about, social } from "@/resources";
 
@@ -23,97 +24,91 @@ export async function generateMetadata() {
 export default function BookingConfirmed() {
   const preparationTips = [
     {
-      emoji: "🎯",
+      icon: "rocket",
       title: "Define Your Challenge",
-      description: "Think about the biggest operational pain point you want to solve. The clearer you can describe it, the more value we'll extract from our time.",
+      description: "Think about the biggest operational pain point you want to solve.",
     },
     {
-      emoji: "🛠️",
+      icon: "briefcase",
       title: "List Your Current Tools",
-      description: "Jot down the software and systems you're using today—spreadsheets, CRMs, accounting tools, anything relevant.",
+      description: "Jot down the software and systems you're using today.",
     },
     {
-      emoji: "📊",
+      icon: "globe",
       title: "Know Your Numbers",
-      description: "How much time does this problem cost you weekly? What would solving it be worth? These help me understand the ROI potential.",
+      description: "How much time does this problem cost you weekly?",
     },
     {
-      emoji: "❓",
+      icon: "document",
       title: "Prepare Questions",
-      description: "About timelines, pricing, technical approach—anything you want clarity on. No question is too basic.",
+      description: "About timelines, pricing, technical approach—anything.",
     },
-  ];
+  ] as const;
 
   const whatHappensNext = [
     {
       step: "1",
       title: "Check Your Email",
-      description: "You'll receive a calendar invite with the video meeting link. Add it to your calendar so you don't miss it.",
+      description: "You'll receive a calendar invite with the video meeting link.",
     },
     {
       step: "2",
       title: "24-Hour Reminder",
-      description: "I'll send a reminder email the day before with the meeting link and any final prep tips.",
+      description: "I'll send a reminder the day before with final prep tips.",
     },
     {
       step: "3",
       title: "We Meet",
-      description: "30 minutes of focused discussion. You'll walk away with clarity—even if we don't end up working together.",
+      description: "30 minutes of focused discussion. You'll walk away with clarity.",
     },
   ];
 
   return (
-    <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+    <Column maxWidth="m" gap="l" paddingY="12" horizontal="center" paddingX="m">
       {/* Success Hero */}
-      <Column fillWidth horizontal="center" align="center" gap="l" marginBottom="l">
-        <RevealFx translateY="4">
+      <Column fillWidth horizontal="center" align="center" gap="m">
+        <RevealFx translateY="4" horizontal="center">
           <Row
-            padding="20"
+            padding="16"
             radius="full"
             background="brand-alpha-weak"
             border="brand-alpha-medium"
-            style={{
-              backdropFilter: "blur(var(--static-space-1))",
-            }}
           >
-            <Text style={{ fontSize: "48px", lineHeight: 1 }}>🎉</Text>
+            <Icon name="rocket" size="xl" onBackground="brand-strong" />
           </Row>
         </RevealFx>
 
-        <RevealFx translateY="8" delay={0.1}>
+        <RevealFx translateY="8" delay={0.1} horizontal="center">
           <Heading variant="display-strong-xl" align="center">
             You're all set!
           </Heading>
         </RevealFx>
 
-        <RevealFx translateY="8" delay={0.2}>
+        <RevealFx translateY="8" delay={0.2} horizontal="center">
           <Text
-            variant="heading-default-l"
+            variant="body-default-l"
             onBackground="neutral-weak"
             align="center"
-            style={{ maxWidth: "500px" }}
+            style={{ maxWidth: "460px" }}
           >
             Your Blueprint Session is confirmed. I'm looking forward to learning about your business and exploring how I can help.
           </Text>
         </RevealFx>
 
-        <RevealFx translateY="8" delay={0.3}>
+        <RevealFx translateY="8" delay={0.3} horizontal="center">
           <Row
-            padding="16"
-            paddingX="24"
+            padding="12"
+            paddingX="20"
             radius="l"
             background="brand-alpha-weak"
             border="brand-alpha-medium"
-            gap="16"
+            gap="12"
             vertical="center"
-            style={{
-              backdropFilter: "blur(var(--static-space-1))",
-            }}
           >
-            <Avatar src={person.avatar} size="l" />
-            <Column gap="4">
-              <Text variant="heading-strong-m">{person.name}</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+            <Avatar src={person.avatar} size="m" />
+            <Column gap="2">
+              <Text variant="heading-strong-s">{person.name}</Text>
+              <Text variant="body-default-xs" onBackground="neutral-weak">
                 {person.role}
               </Text>
             </Column>
@@ -121,40 +116,47 @@ export default function BookingConfirmed() {
         </RevealFx>
       </Column>
 
+      {/* Divider */}
+      <Row fillWidth horizontal="center">
+        <Line maxWidth={48} />
+      </Row>
+
       {/* What Happens Next */}
       <RevealFx translateY="12" delay={0.4} fillWidth>
-        <Column fillWidth gap="24">
-          <Heading as="h2" variant="display-strong-s" align="center">
+        <Column fillWidth gap="16">
+          <Heading as="h2" variant="heading-strong-l" align="center">
             What happens next
           </Heading>
 
-          <Row fillWidth gap="16" s={{ direction: "column" }}>
+          <Row fillWidth gap="12" s={{ direction: "column" }}>
             {whatHappensNext.map((item, index) => (
               <Column
                 key={index}
                 flex={1}
-                padding="24"
+                padding="20"
                 radius="l"
                 border="neutral-alpha-weak"
                 background="surface"
-                gap="12"
+                gap="8"
                 horizontal="center"
                 align="center"
+                s={{ padding: "16" }}
               >
                 <Row
-                  padding="12"
+                  padding="8"
+                  paddingX="12"
                   radius="full"
                   background="brand-alpha-weak"
                   border="brand-alpha-medium"
                 >
-                  <Text variant="heading-strong-l" onBackground="brand-strong">
+                  <Text variant="heading-strong-m" onBackground="brand-strong">
                     {item.step}
                   </Text>
                 </Row>
-                <Text variant="heading-strong-m" align="center">
+                <Text variant="heading-strong-s" align="center">
                   {item.title}
                 </Text>
-                <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+                <Text variant="body-default-xs" onBackground="neutral-weak" align="center">
                   {item.description}
                 </Text>
               </Column>
@@ -164,61 +166,52 @@ export default function BookingConfirmed() {
       </RevealFx>
 
       {/* Divider */}
-      <Row fillWidth horizontal="center" paddingY="l">
+      <Row fillWidth horizontal="center">
         <Line maxWidth={48} />
       </Row>
 
       {/* Preparation Tips */}
       <RevealFx translateY="12" delay={0.5} fillWidth>
-        <Column fillWidth gap="24">
-          <Column gap="8" horizontal="center" align="center">
-            <Heading as="h2" variant="display-strong-s" align="center">
+        <Column fillWidth gap="16">
+          <Column gap="4" horizontal="center" align="center">
+            <Heading as="h2" variant="heading-strong-l" align="center">
               Make the most of our time
             </Heading>
             <Text
-              variant="body-default-l"
+              variant="body-default-m"
               onBackground="neutral-weak"
               align="center"
-              style={{ maxWidth: "500px" }}
             >
-              A little preparation goes a long way. Here's how to come ready:
+              A little preparation goes a long way
             </Text>
           </Column>
 
-          <Column fillWidth gap="16">
+          <Row fillWidth gap="12" wrap>
             {preparationTips.map((tip, index) => (
-              <Row
+              <Column
                 key={index}
-                fillWidth
-                padding="20"
+                padding="16"
                 radius="l"
                 border="neutral-alpha-weak"
                 background="surface"
-                gap="16"
-                vertical="center"
+                gap="8"
+                style={{ flex: "1 1 calc(50% - 6px)", minWidth: "280px" }}
               >
-                <Row
-                  padding="12"
-                  radius="m"
-                  background="brand-alpha-weak"
-                  style={{ flexShrink: 0 }}
-                >
-                  <Text style={{ fontSize: "24px", lineHeight: 1 }}>{tip.emoji}</Text>
+                <Row gap="12" vertical="center">
+                  <Icon name={tip.icon} size="m" onBackground="brand-strong" style={{ flexShrink: 0 }} />
+                  <Text variant="heading-strong-s">{tip.title}</Text>
                 </Row>
-                <Column gap="4" flex={1}>
-                  <Text variant="heading-strong-m">{tip.title}</Text>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
-                    {tip.description}
-                  </Text>
-                </Column>
-              </Row>
+                <Text variant="body-default-xs" onBackground="neutral-weak">
+                  {tip.description}
+                </Text>
+              </Column>
             ))}
-          </Column>
+          </Row>
         </Column>
       </RevealFx>
 
       {/* Divider */}
-      <Row fillWidth horizontal="center" paddingY="l">
+      <Row fillWidth horizontal="center">
         <Line maxWidth={48} />
       </Row>
 
@@ -226,42 +219,40 @@ export default function BookingConfirmed() {
       <RevealFx translateY="12" delay={0.6} fillWidth>
         <Column
           fillWidth
-          padding="32"
+          padding="24"
           radius="l"
           border="brand-alpha-medium"
           background="brand-alpha-weak"
-          gap="20"
-          style={{
-            backdropFilter: "blur(var(--static-space-1))",
-          }}
+          gap="16"
+          s={{ padding: "16" }}
         >
-          <Heading as="h2" variant="heading-strong-xl" align="center">
+          <Heading as="h2" variant="heading-strong-l" align="center">
             What to expect in our call
           </Heading>
 
-          <Column gap="16" style={{ maxWidth: "600px", margin: "0 auto" }}>
-            <Row gap="12" vertical="start">
-              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
-              <Text variant="body-default-l">
-                <strong>Honest assessment</strong> — I'll tell you what's realistic and what's not, even if it means recommending a different approach.
+          <Column gap="12">
+            <Row gap="12" vertical="center">
+              <Icon name="arrowRight" size="s" onBackground="brand-strong" style={{ flexShrink: 0 }} />
+              <Text variant="body-default-m">
+                <strong>Honest assessment</strong> — I'll tell you what's realistic and what's not.
               </Text>
             </Row>
-            <Row gap="12" vertical="start">
-              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
-              <Text variant="body-default-l">
-                <strong>Clear next steps</strong> — Whether we work together or not, you'll leave with actionable insights.
+            <Row gap="12" vertical="center">
+              <Icon name="arrowRight" size="s" onBackground="brand-strong" style={{ flexShrink: 0 }} />
+              <Text variant="body-default-m">
+                <strong>Clear next steps</strong> — You'll leave with actionable insights.
               </Text>
             </Row>
-            <Row gap="12" vertical="start">
-              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
-              <Text variant="body-default-l">
-                <strong>No pressure</strong> — This is a discovery call, not a sales pitch. My goal is to help you make the right decision.
+            <Row gap="12" vertical="center">
+              <Icon name="arrowRight" size="s" onBackground="brand-strong" style={{ flexShrink: 0 }} />
+              <Text variant="body-default-m">
+                <strong>No pressure</strong> — This is a discovery call, not a sales pitch.
               </Text>
             </Row>
-            <Row gap="12" vertical="start">
-              <Text style={{ fontSize: "20px", marginTop: "2px" }}>✓</Text>
-              <Text variant="body-default-l">
-                <strong>Scope estimate</strong> — If your project is a fit, I'll provide a rough estimate of complexity and cost.
+            <Row gap="12" vertical="center">
+              <Icon name="arrowRight" size="s" onBackground="brand-strong" style={{ flexShrink: 0 }} />
+              <Text variant="body-default-m">
+                <strong>Scope estimate</strong> — I'll provide a rough estimate if it's a fit.
               </Text>
             </Row>
           </Column>
@@ -270,48 +261,48 @@ export default function BookingConfirmed() {
 
       {/* CTA Section */}
       <RevealFx translateY="12" delay={0.7} fillWidth>
-        <Column fillWidth gap="24" horizontal="center" align="center" marginTop="l">
-          <Column gap="8" horizontal="center" align="center">
-            <Heading as="h3" variant="heading-strong-l" align="center">
+        <Column fillWidth gap="16" horizontal="center" align="center">
+          <Column gap="4" horizontal="center" align="center">
+            <Text variant="heading-strong-m" align="center">
               While you wait...
-            </Heading>
-            <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+            </Text>
+            <Text variant="body-default-s" onBackground="neutral-weak" align="center">
               Learn more about my work and approach
             </Text>
           </Column>
 
-          <Row gap="12" wrap horizontal="center">
+          <Row gap="8" wrap horizontal="center">
             <Button
               href="/work"
               variant="secondary"
-              size="m"
+              size="s"
               data-border="rounded"
               prefixIcon="grid"
             >
-              View Projects
+              Projects
             </Button>
             <Button
               href="/blog"
               variant="secondary"
-              size="m"
+              size="s"
               data-border="rounded"
               prefixIcon="book"
             >
-              Read Blog
+              Blog
             </Button>
             <Button
               href={about.path}
               variant="secondary"
-              size="m"
+              size="s"
               data-border="rounded"
               prefixIcon="person"
             >
-              About Me
+              About
             </Button>
           </Row>
 
           {/* Social Links */}
-          <Row gap="8" marginTop="l">
+          <Row gap="8" wrap horizontal="center">
             {social
               .filter((item) => item.essential)
               .map((item) => (

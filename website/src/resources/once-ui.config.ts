@@ -23,6 +23,7 @@ const routes: RoutesConfig = {
   "/gallery": true,
   "/services": true,
   "/pricing": false,
+  "/booking-confirmed": true,
 };
 
 const display: DisplayConfig = {

@@ -1,5 +1,6 @@
 import { Column, Row, Heading, Text, IconButton, Icon } from "@once-ui-system/core";
 import { about } from "@/resources";
+import { CalEmbed } from "@/components";
 
 interface BlueprintCTAProps {
   title: string;
@@ -45,27 +46,28 @@ export function BlueprintCTA({ title, description, duration, price }: BlueprintC
           </Column>
         </Row>
       </Column>
-      <Row
-        fitWidth
-        border="brand-alpha-medium"
-        background="brand-alpha-weak"
-        radius="full"
-        padding="4"
-        gap="8"
-        vertical="center"
-        style={{
-          backdropFilter: "blur(var(--static-space-1))",
-        }}
-      >
-        <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
-        <Row paddingX="8">Schedule a Blueprint Session</Row>
-        <IconButton
-          href={about.calendar.link}
-          data-border="rounded"
-          variant="secondary"
-          icon="chevronRight"
-        />
-      </Row>
+      <CalEmbed calLink={about.calendar.link}>
+        <Row
+          fitWidth
+          border="brand-alpha-medium"
+          background="brand-alpha-weak"
+          radius="full"
+          padding="4"
+          gap="8"
+          vertical="center"
+          style={{
+            backdropFilter: "blur(var(--static-space-1))",
+          }}
+        >
+          <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
+          <Row paddingX="8">Schedule a Blueprint Session</Row>
+          <IconButton
+            data-border="rounded"
+            variant="secondary"
+            icon="chevronRight"
+          />
+        </Row>
+      </CalEmbed>
     </Column>
   );
 }
