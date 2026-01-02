@@ -8,65 +8,49 @@ interface CalEmbedProps {
   children?: React.ReactNode;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const window: any;
-
 export function CalEmbed({ calLink, children }: CalEmbedProps) {
   const [isReady, setIsReady] = useState(false);
   const calUsername = calLink.replace("https://cal.com/", "");
 
   useEffect(() => {
-    // Create Cal namespace using official embed code
-    (function (C: any, A: string, L: string) {
-      const p = function (a: any, ar: any) { a.q.push(ar); };
-      const d = C.document;
-      C.Cal = C.Cal || function () {
-        const cal = C.Cal;
-        const ar = arguments;
-        if (!cal.loaded) {
-          cal.ns = {};
-          cal.q = cal.q || [];
-          d.head.appendChild(d.createElement("script")).src = A;
-          cal.loaded = true;
-        }
-        if (ar[0] === L) {
-          const api = function () { p(api, arguments); };
-          const namespace = ar[1];
-          api.q = api.q || [];
-          if (typeof namespace === "string") {
-            cal.ns[namespace] = cal.ns[namespace] || api;
-            p(cal.ns[namespace], ar);
-            p(cal, ["initNamespace", namespace]);
-          } else {
-            p(cal, ar);
-          }
-          return;
-        }
-        p(cal, ar);
+    const win = window as Record<string, unknown>;
+
+    // Load Cal.com script
+    if (!win.Cal) {
+      const script = document.createElement("script");
+      script.src = "https://app.cal.com/embed/embed.js";
+      script.async = true;
+      script.onload = () => {
+        const Cal = win.Cal as (action: string, config?: unknown) => void;
+        Cal("init", { origin: "https://cal.com" });
+        Cal("ui", {
+          theme: "dark",
+          styles: { branding: { brandColor: "#00b4d8" } },
+          hideEventTypeDetails: false,
+        });
+        setIsReady(true);
       };
-    })(window, "https://app.cal.com/embed/embed.js", "init");
-
-    window.Cal("init", { origin: "https://cal.com" });
-
-    window.Cal("ui", {
-      theme: "dark",
-      styles: { branding: { brandColor: "#00b4d8" } },
-      hideEventTypeDetails: false,
-    });
-
-    setIsReady(true);
+      document.head.appendChild(script);
+    } else {
+      setIsReady(true);
+    }
   }, []);
 
   const openCalModal = () => {
-    if (!isReady) return;
+    const win = window as Record<string, unknown>;
+    const Cal = win.Cal as (action: string, config?: unknown) => void;
 
-    window.Cal("modal", {
-      calLink: calUsername,
-      config: {
-        layout: "month_view",
-        theme: "dark",
-      },
-    });
+    if (Cal) {
+      Cal("modal", {
+        calLink: calUsername,
+        config: {
+          layout: "month_view",
+          theme: "dark",
+        },
+      });
+    } else {
+      window.open(calLink, "_blank");
+    }
   };
 
   if (children) {
@@ -89,7 +73,7 @@ export function CalEmbed({ calLink, children }: CalEmbedProps) {
       onClick={openCalModal}
       style={{
         backdropFilter: "blur(var(--static-space-1))",
-        cursor: "pointer",
+        cursor: isReady ? "pointer" : "wait",
       }}
     >
       <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
