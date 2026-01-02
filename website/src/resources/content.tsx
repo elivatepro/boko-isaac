@@ -99,7 +99,7 @@ const about: About = {
   },
   calendar: {
     display: true,
-    link: "https://cal.com",
+    link: "https://cal.com/bokox/blueprint-session",
   },
   intro: {
     display: true,
