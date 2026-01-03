@@ -3,6 +3,10 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
+// Force Node.js runtime for file system operations
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 const projectsDir = path.join(process.cwd(), "src/app/work/projects");
 
 // Check authentication

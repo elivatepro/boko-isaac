@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { put, list } from "@vercel/blob";
 
-const imagesDir = path.join(process.cwd(), "public/images");
+// Force Node.js runtime
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // Check authentication
 async function isAuthenticated(request: NextRequest): Promise<boolean> {
@@ -44,50 +45,38 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]/g, "-")
       .replace(/-+/g, "-");
     const timestamp = Date.now();
-    const filename = `${baseName}-${timestamp}.${ext}`;
+    const filename = `images/${baseName}-${timestamp}.${ext}`;
 
-    // Ensure images directory exists
-    if (!fs.existsSync(imagesDir)) {
-      fs.mkdirSync(imagesDir, { recursive: true });
-    }
-
-    // Save file
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const filePath = path.join(imagesDir, filename);
-    fs.writeFileSync(filePath, buffer);
+    // Upload to Vercel Blob
+    const blob = await put(filename, file, {
+      access: "public",
+    });
 
     return NextResponse.json({
       success: true,
-      path: `/images/${filename}`,
-      filename,
+      path: blob.url,
+      filename: blob.pathname,
     });
   } catch (error) {
     console.error("Error uploading file:", error);
-    return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: `Failed to upload file: ${errorMessage}` }, { status: 500 });
   }
 }
 
-// GET - List all images
+// GET - List all images from Vercel Blob
 export async function GET(request: NextRequest) {
   if (!(await isAuthenticated(request))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    if (!fs.existsSync(imagesDir)) {
-      return NextResponse.json({ images: [] });
-    }
+    const { blobs } = await list({ prefix: "images/" });
 
-    const files = fs.readdirSync(imagesDir);
-    const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
-
-    const images = files
-      .filter((f) => imageExtensions.some((ext) => f.toLowerCase().endsWith(ext)))
-      .map((f) => ({
-        name: f,
-        path: `/images/${f}`,
-      }));
+    const images = blobs.map((blob) => ({
+      name: blob.pathname.replace("images/", ""),
+      path: blob.url,
+    }));
 
     return NextResponse.json({ images });
   } catch (error) {
