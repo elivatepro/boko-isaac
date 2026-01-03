@@ -51,6 +51,5 @@ export function Posts({
     );
   }
 
-  // @ts-expect-error async server component
   return <Render />;
 }

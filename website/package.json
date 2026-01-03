@@ -17,6 +17,7 @@
     "@next/mdx": "^16.0.10",
     "@once-ui-system/core": "^1.5.6",
     "@supabase/supabase-js": "^2.89.0",
+    "@vercel/analytics": "^1.6.1",
     "@vercel/blob": "^2.0.0",
     "classnames": "^2.5.1",
     "cookie": "^1.0.2",
