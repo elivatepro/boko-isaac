@@ -250,7 +250,7 @@ export async function createProject(
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("projects")
-    .insert(toDatabasePayload(normalized))
+    .insert(toDatabasePayload(normalized) as any)
     .select()
     .single();
 
@@ -293,7 +293,7 @@ export async function updateProject(
 
   const { data, error } = await supabase
     .from("projects")
-    .update(toDatabasePayload(normalized))
+    .update(toDatabasePayload(normalized) as any)
     .eq("slug", slug)
     .select()
     .single();
@@ -322,7 +322,7 @@ export async function deleteProject(
     .from("projects")
     .delete()
     .eq("slug", slug)
-    .select("slug", { count: "exact", head: true });
+    .select("slug");
 
   if (error) {
     throw new Error(`Failed to delete project from Supabase: ${error.message}`);

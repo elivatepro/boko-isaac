@@ -166,20 +166,18 @@ export async function createBlog(post: BlogPost, options: { fallbackToFilesystem
   }
 
   const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from("blogs")
-    .insert({
-      slug: post.slug,
-      title: post.title,
-      subtitle: post.subtitle ?? null,
-      summary: post.summary,
-      image: post.image ?? null,
-      published_at: post.publishedAt,
-      tag: post.tag ?? null,
-      content: post.content,
-    })
-    .select()
-    .single();
+  const payload: Database["public"]["Tables"]["blogs"]["Insert"] = {
+    slug: post.slug,
+    title: post.title,
+    subtitle: post.subtitle ?? null,
+    summary: post.summary,
+    image: post.image ?? null,
+    published_at: post.publishedAt,
+    tag: post.tag ?? null,
+    content: post.content,
+  };
+
+  const { data, error } = await supabase.from("blogs").insert(payload as any).select().single();
 
   if (error) {
     if (error.code === "23505") {
@@ -222,7 +220,7 @@ export async function updateBlog(
 
   const { data, error } = await supabase
     .from("blogs")
-    .update(updatedPayload)
+    .update(updatedPayload as any)
     .eq("slug", slug)
     .select()
     .single();
@@ -247,11 +245,7 @@ export async function deleteBlog(
   }
 
   const supabase = getSupabaseClient();
-  const { error, count } = await supabase
-    .from("blogs")
-    .delete()
-    .eq("slug", slug)
-    .select("slug", { count: "exact", head: true });
+  const { error, count } = await supabase.from("blogs").delete().eq("slug", slug).select("slug");
 
   if (error) {
     throw new Error(`Failed to delete blog from Supabase: ${error.message}`);

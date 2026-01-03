@@ -3,7 +3,7 @@ import { Database } from "@/types";
 
 declare global {
   // eslint-disable-next-line no-var
-  var _supabaseClient: SupabaseClient<Database> | undefined;
+  var _supabaseClient: SupabaseClient<any> | undefined;
 }
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -13,7 +13,7 @@ export function isSupabaseConfigured(): boolean {
   return Boolean(supabaseUrl && supabaseServiceRoleKey);
 }
 
-export function getSupabaseClient(): SupabaseClient<Database> {
+export function getSupabaseClient(): SupabaseClient<any> {
   if (!isSupabaseConfigured()) {
     throw new Error("Supabase environment variables are not set. Please configure .env.local.");
   }

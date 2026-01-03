@@ -148,7 +148,7 @@ export async function createReview(payload: Partial<Review>): Promise<Review> {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from("reviews")
-    .insert(toDatabasePayload(normalized))
+    .insert(toDatabasePayload(normalized) as any)
     .select()
     .single();
 
@@ -184,7 +184,7 @@ export async function updateReview(slug: string, payload: Partial<Review>): Prom
 
   const { data, error } = await supabase
     .from("reviews")
-    .update(toDatabasePayload(normalized))
+    .update(toDatabasePayload(normalized) as any)
     .eq("slug", slug)
     .select()
     .single();
@@ -206,7 +206,7 @@ export async function deleteReview(slug: string): Promise<void> {
     .from("reviews")
     .delete()
     .eq("slug", slug)
-    .select("slug", { count: "exact", head: true });
+    .select("slug");
 
   if (error) {
     throw new Error(`Failed to delete review from Supabase: ${error.message}`);
