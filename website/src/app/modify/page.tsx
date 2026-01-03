@@ -108,8 +108,30 @@ export default function ModifyPage() {
     value
       .toLowerCase()
       .trim()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+      .replace(/\s+/g, "-") // spaces -> hyphen
+      .replace(/[^a-z0-9-]/g, "") // drop other symbols
+      .replace(/-+/g, "-") // collapse multiple hyphens
+      .replace(/^-+|-+$/g, ""); // trim hyphens from ends
+
+  const autoSetSlug = (value: string, type: ContentType) => {
+    const nextSlug = slugify(value);
+    if (type === "projects") {
+      setProjectForm((prev) => {
+        const shouldUpdate = !prev.slug || prev.slug === slugify(prev.title);
+        return shouldUpdate ? { ...prev, slug: nextSlug } : prev;
+      });
+    } else if (type === "blogs") {
+      setBlogForm((prev) => {
+        const shouldUpdate = !prev.slug || prev.slug === slugify(prev.title);
+        return shouldUpdate ? { ...prev, slug: nextSlug } : prev;
+      });
+    } else {
+      setReviewForm((prev) => {
+        const shouldUpdate = !prev.slug || prev.slug === slugify(prev.name);
+        return shouldUpdate ? { ...prev, slug: nextSlug } : prev;
+      });
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -734,6 +756,7 @@ export default function ModifyPage() {
                       ? slugify(value)
                       : prev.slug,
                 }));
+                autoSetSlug(value, "reviews");
               }}
               description="Client or reviewer name"
             />
@@ -783,11 +806,16 @@ export default function ModifyPage() {
               id="title"
               label={isProject ? "Project Title" : "Post Title"}
               value={isProject ? projectForm.title : blogForm.title}
-              onChange={(e) =>
-                isProject
-                  ? setProjectForm({ ...projectForm, title: e.target.value })
-                  : setBlogForm({ ...blogForm, title: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value;
+                if (isProject) {
+                  setProjectForm({ ...projectForm, title: value });
+                  autoSetSlug(value, "projects");
+                } else {
+                  setBlogForm({ ...blogForm, title: value });
+                  autoSetSlug(value, "blogs");
+                }
+              }}
               description={isProject ? "The main title displayed on the project page" : "The main title displayed on the blog post"}
             />
 

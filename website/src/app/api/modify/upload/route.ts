@@ -17,6 +17,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    console.error("BLOB_READ_WRITE_TOKEN is missing");
+    return NextResponse.json(
+      { error: "Storage token not configured. Please set BLOB_READ_WRITE_TOKEN." },
+      { status: 500 },
+    );
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
@@ -50,6 +58,7 @@ export async function POST(request: NextRequest) {
     // Upload to Vercel Blob
     const blob = await put(filename, file, {
       access: "public",
+      token: process.env.BLOB_READ_WRITE_TOKEN,
     });
 
     return NextResponse.json({
@@ -70,8 +79,16 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    console.error("BLOB_READ_WRITE_TOKEN is missing");
+    return NextResponse.json(
+      { error: "Storage token not configured. Please set BLOB_READ_WRITE_TOKEN." },
+      { status: 500 },
+    );
+  }
+
   try {
-    const { blobs } = await list({ prefix: "images/" });
+    const { blobs } = await list({ prefix: "images/", token: process.env.BLOB_READ_WRITE_TOKEN });
 
     const images = blobs.map((blob) => ({
       name: blob.pathname.replace("images/", ""),
