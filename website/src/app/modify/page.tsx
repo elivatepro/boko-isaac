@@ -11,7 +11,6 @@ import {
   Textarea,
   Spinner,
   Icon,
-  IconButton,
   Media,
 } from "@once-ui-system/core";
 
@@ -215,13 +214,13 @@ export default function ModifyPage() {
       <Column maxWidth="l" fillWidth gap="l" paddingY="xl">
         <Row fillWidth horizontal="between" vertical="center">
           <Column gap="4">
-            <Heading variant="display-strong-l">Modify Portfolio</Heading>
+            <Heading variant="display-strong-l">Manage Projects</Heading>
             <Text variant="body-default-m" onBackground="neutral-weak">
-              Add, edit, or delete your projects
+              Add, edit, or delete your portfolio projects
             </Text>
           </Column>
           <Button onClick={handleNew} prefixIcon="plus">
-            New Project
+            Add Project
           </Button>
         </Row>
 
@@ -255,25 +254,29 @@ export default function ModifyPage() {
               <Column gap="4" style={{ flex: 1 }}>
                 <Text variant="heading-strong-m">{project.title}</Text>
                 <Text variant="body-default-s" onBackground="neutral-weak">
-                  {project.summary.substring(0, 100)}...
+                  {project.summary.length > 100 ? project.summary.substring(0, 100) + "..." : project.summary}
                 </Text>
                 <Text variant="label-default-xs" onBackground="neutral-weak">
-                  {project.publishedAt}
+                  Published: {project.publishedAt}
                 </Text>
               </Column>
               <Row gap="8">
-                <IconButton
-                  icon="edit"
+                <Button
                   variant="secondary"
+                  size="s"
+                  prefixIcon="edit"
                   onClick={() => handleEdit(project)}
-                  tooltip="Edit"
-                />
-                <IconButton
-                  icon="trash"
+                >
+                  Edit
+                </Button>
+                <Button
                   variant="danger"
+                  size="s"
+                  prefixIcon="trash"
                   onClick={() => handleDelete(project.slug)}
-                  tooltip="Delete"
-                />
+                >
+                  Delete
+                </Button>
               </Row>
             </Row>
           ))}
@@ -297,14 +300,14 @@ export default function ModifyPage() {
       <Row fillWidth horizontal="between" vertical="center">
         <Column gap="4">
           <Heading variant="display-strong-l">
-            {view === "new" ? "New Project" : "Edit Project"}
+            {view === "new" ? "Add New Project" : "Edit Project"}
           </Heading>
           <Text variant="body-default-m" onBackground="neutral-weak">
-            {view === "new" ? "Create a new portfolio project" : `Editing: ${currentProject?.title}`}
+            {view === "new" ? "Fill in the details for your new project" : `Editing: ${currentProject?.title}`}
           </Text>
         </Column>
         <Button onClick={() => setView("list")} variant="secondary" prefixIcon="arrowLeft">
-          Back
+          Back to List
         </Button>
       </Row>
 
@@ -322,14 +325,14 @@ export default function ModifyPage() {
         </Row>
       )}
 
-      <Column fillWidth gap="20" padding="24" radius="l" border="neutral-alpha-weak" background="surface">
+      <Column fillWidth gap="24" padding="24" radius="l" border="neutral-alpha-weak" background="surface">
         {view === "new" && (
           <Input
             id="slug"
-            label="Slug (URL path)"
+            label="URL Slug"
             value={formData.slug}
-            onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })}
-            description="e.g., my-awesome-project"
+            onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") })}
+            description="This will be the URL path for your project (e.g., my-awesome-project)"
           />
         )}
 
@@ -338,27 +341,34 @@ export default function ModifyPage() {
           label="Project Title"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          description="The main title displayed on the project page"
         />
 
         <Input
           id="publishedAt"
-          label="Published Date"
+          label="Publication Date"
           type="date"
           value={formData.publishedAt}
           onChange={(e) => setFormData({ ...formData, publishedAt: e.target.value })}
+          description="When this project was completed or published"
         />
 
         <Textarea
           id="summary"
-          label="Summary"
+          label="Project Summary"
           value={formData.summary}
           onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-          description="Brief description shown on the work page"
+          description="A brief description shown on the work listing page (1-2 sentences)"
           lines={3}
         />
 
         <Column gap="16">
-          <Text variant="label-default-s">Images</Text>
+          <Column gap="4">
+            <Text variant="heading-strong-s">Project Images</Text>
+            <Text variant="body-default-s" onBackground="neutral-weak">
+              Upload or select images to showcase your project
+            </Text>
+          </Column>
 
           {[0, 1].map((index) => (
             <Column key={index} gap="8">
@@ -366,9 +376,10 @@ export default function ModifyPage() {
                 <Column style={{ flex: 1 }}>
                   <Input
                     id={`image${index + 1}`}
-                    label={`Image ${index + 1} Path`}
+                    label={index === 0 ? "Cover Image" : "Secondary Image"}
                     value={formData.images[index]}
                     onChange={(e) => handleImageChange(index, e.target.value)}
+                    description={index === 0 ? "Main image shown on the project card" : "Additional image for the project gallery"}
                   />
                 </Column>
                 <input
@@ -387,14 +398,14 @@ export default function ModifyPage() {
                   onClick={() => fileInputRefs[index].current?.click()}
                   disabled={uploading === index}
                 >
-                  {uploading === index ? "Uploading..." : "Upload"}
+                  {uploading === index ? "Uploading..." : "Upload New"}
                 </Button>
                 <Button
                   variant="tertiary"
                   size="s"
                   onClick={() => setShowImagePicker(showImagePicker === index ? null : index)}
                 >
-                  Browse
+                  Browse Library
                 </Button>
               </Row>
 
@@ -420,8 +431,8 @@ export default function ModifyPage() {
                   background="page"
                   style={{ maxHeight: "300px", overflowY: "auto" }}
                 >
-                  <Text variant="label-default-xs" onBackground="neutral-weak">
-                    Select an existing image:
+                  <Text variant="label-default-s" onBackground="neutral-weak">
+                    Select from uploaded images:
                   </Text>
                   <Row gap="8" wrap>
                     {availableImages.map((img) => (
@@ -449,7 +460,7 @@ export default function ModifyPage() {
                     ))}
                     {availableImages.length === 0 && (
                       <Text variant="body-default-s" onBackground="neutral-weak">
-                        No images uploaded yet
+                        No images uploaded yet. Use the Upload button above.
                       </Text>
                     )}
                   </Row>
@@ -461,10 +472,10 @@ export default function ModifyPage() {
 
         <Textarea
           id="content"
-          label="Content (Markdown)"
+          label="Project Content"
           value={formData.content}
           onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-          description="Project details in Markdown format"
+          description="Detailed project description using Markdown formatting. Include sections like Overview, Challenge, Solution, Results, etc."
           lines={20}
         />
       </Column>
@@ -474,7 +485,7 @@ export default function ModifyPage() {
           Cancel
         </Button>
         <Button onClick={handleSave} disabled={saving}>
-          {saving ? "Saving..." : "Save Project"}
+          {saving ? "Saving..." : view === "new" ? "Create Project" : "Save Changes"}
         </Button>
       </Row>
     </Column>
