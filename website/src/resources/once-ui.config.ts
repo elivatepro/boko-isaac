@@ -24,6 +24,7 @@ const routes: RoutesConfig = {
   "/services": true,
   "/pricing": false,
   "/booking-confirmed": true,
+  "/modify": true,
 };
 
 const display: DisplayConfig = {
@@ -34,7 +35,9 @@ const display: DisplayConfig = {
 
 // Enable password protection on selected routes
 // Set password in the .env file, refer to .env.example
-const protectedRoutes: ProtectedRoutesConfig = {};
+const protectedRoutes: ProtectedRoutesConfig = {
+  "/modify": true,
+};
 
 // Import and set font for each variant
 import { Lexend } from "next/font/google";
