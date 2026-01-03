@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import { deleteProject, fetchProjectBySlug, updateProject } from "@/utils/projects";
+import { isSupabaseConfigured } from "@/utils/supabaseClient";
 
-// Force Node.js runtime for file system operations
+// Force Node.js runtime for server-side utilities
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const projectsDir = path.join(process.cwd(), "src/app/work/projects");
 
 // Check authentication
 async function isAuthenticated(request: NextRequest): Promise<boolean> {
@@ -27,26 +24,27 @@ export async function GET(
 
   try {
     const { slug } = await params;
-    const filePath = path.join(projectsDir, `${slug}.mdx`);
+    const project = await fetchProjectBySlug(slug);
 
-    if (!fs.existsSync(filePath)) {
+    if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    const fileContent = fs.readFileSync(filePath, "utf-8");
-    const { data, content } = matter(fileContent);
-
     return NextResponse.json({
-      slug,
-      title: data.title || "",
-      publishedAt: data.publishedAt || "",
-      summary: data.summary || "",
-      images: data.images || [],
-      content: content,
+      slug: project.slug,
+      title: project.title,
+      publishedAt: project.publishedAt,
+      summary: project.summary,
+      images: project.images,
+      content: project.content,
+      link: project.link,
+      image: project.image,
+      team: project.team,
     });
   } catch (error) {
     console.error("Error reading project:", error);
-    return NextResponse.json({ error: "Failed to read project" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to read project";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -61,42 +59,20 @@ export async function PUT(
 
   try {
     const { slug } = await params;
-    const filePath = path.join(projectsDir, `${slug}.mdx`);
-
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-    }
-
     const body = await request.json();
-    const { title, publishedAt, summary, images, content } = body;
+    const { title, publishedAt, summary, images, content, link, team, image } = body;
 
-    // Read existing file to preserve team data
-    const existingContent = fs.readFileSync(filePath, "utf-8");
-    const { data: existingData } = matter(existingContent);
+    const updated = await updateProject(
+      slug,
+      { title, publishedAt, summary, images, content, link, team, image },
+      { fallbackToFilesystem: !isSupabaseConfigured() },
+    );
 
-    // Create updated MDX content
-    const frontmatter = {
-      title,
-      publishedAt,
-      summary,
-      images: images.filter((img: string) => img.trim() !== ""),
-      team: existingData.team || [
-        {
-          name: "Boko Isaac",
-          role: "Systems Architect & Automation Engineer",
-          avatar: "/images/boko-avatar-new.png",
-          linkedIn: "https://www.linkedin.com/in/boko-isaac/",
-        },
-      ],
-    };
-
-    const mdxContent = matter.stringify(content || "", frontmatter);
-    fs.writeFileSync(filePath, mdxContent);
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, slug: updated.slug });
   } catch (error) {
     console.error("Error updating project:", error);
-    return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to update project";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -109,19 +85,20 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const routeParams = await params;
+  const slug = routeParams.slug;
+
   try {
-    const { slug } = await params;
-    const filePath = path.join(projectsDir, `${slug}.mdx`);
-
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-    }
-
-    fs.unlinkSync(filePath);
+    console.log("DELETE /api/modify/projects slug param:", slug);
+    await deleteProject(slug, { fallbackToFilesystem: !isSupabaseConfigured() });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting project:", error);
-    return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
+    const baseMessage = error instanceof Error ? error.message : "Failed to delete project";
+    const notFound = baseMessage.includes("Project not found");
+    const message = notFound ? baseMessage : baseMessage;
+    const status = notFound ? 404 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }

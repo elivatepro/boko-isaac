@@ -14,6 +14,8 @@ export async function generateMetadata() {
 }
 
 export default function Blog() {
+  // ensure dynamic to read Supabase
+  // (blogs come from Supabase now)
   return (
     <Column maxWidth="m" paddingTop="24">
       <Schema

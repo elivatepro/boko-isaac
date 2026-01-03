@@ -17,13 +17,22 @@ import { Footer, Header, RouteGuard, Providers } from "@/components";
 import { baseURL, effects, fonts, style, dataStyle, home } from "@/resources";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: home.title,
     description: home.description,
     baseURL: baseURL,
     path: home.path,
     image: home.image,
   });
+
+  return {
+    ...metadata,
+    icons: {
+      icon: "/images/boko-avatar-new.png",
+      shortcut: "/images/boko-avatar-new.png",
+      apple: "/images/boko-avatar-new.png",
+    },
+  };
 }
 
 export default async function RootLayout({
@@ -112,6 +121,8 @@ export default async function RootLayout({
           src="https://salesiq.zohopublic.com/widget?wc=siqbbb389ecb09649456f40491d89d75426bb7be1712c3ee889cc4e165ef92fa4bd"
           defer
         />
+        <link rel="icon" href="/images/boko-avatar-new.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/images/boko-avatar-new.png" />
       </head>
       <Providers>
         <Column

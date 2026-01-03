@@ -1,36 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createProject, fetchProjects } from "@/utils/projects";
+import { fetchBlogPosts, createBlog } from "@/utils/blogs";
 import { isSupabaseConfigured } from "@/utils/supabaseClient";
 
-// Force Node.js runtime for server-side utilities
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Check authentication
 async function isAuthenticated(request: NextRequest): Promise<boolean> {
   const cookies = request.cookies;
   const authToken = cookies.get("authToken");
   return authToken?.value === "authenticated";
 }
 
-// GET - List all projects
+// GET all blog posts
 export async function GET(request: NextRequest) {
   if (!(await isAuthenticated(request))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const projects = await fetchProjects();
-
-    return NextResponse.json({ projects });
+    const blogs = await fetchBlogPosts();
+    return NextResponse.json({ blogs });
   } catch (error) {
-    console.error("Error reading projects:", error);
-    const message = error instanceof Error ? error.message : "Failed to read projects";
+    console.error("Error reading blogs:", error);
+    const message = error instanceof Error ? error.message : "Failed to read blogs";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
-// POST - Create new project
+// POST create blog post
 export async function POST(request: NextRequest) {
   if (!(await isAuthenticated(request))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -38,27 +35,30 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { slug, title, publishedAt, summary, images = [], content, link, team, image } = body;
+    const { slug, title, subtitle, summary, image, publishedAt, tag, content } = body;
 
-    const project = await createProject(
+    if (!slug || !title) {
+      return NextResponse.json({ error: "Slug and title are required" }, { status: 400 });
+    }
+
+    const blog = await createBlog(
       {
         slug,
         title,
-        publishedAt,
+        subtitle,
         summary,
-        images,
-        content,
-        link,
-        team,
         image,
+        publishedAt,
+        tag,
+        content: content || "",
       },
       { fallbackToFilesystem: !isSupabaseConfigured() },
     );
 
-    return NextResponse.json({ success: true, slug: project.slug, project });
+    return NextResponse.json({ success: true, slug: blog.slug });
   } catch (error) {
-    console.error("Error creating project:", error);
-    const message = error instanceof Error ? error.message : "Failed to create project";
+    console.error("Error creating blog:", error);
+    const message = error instanceof Error ? error.message : "Failed to create blog";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

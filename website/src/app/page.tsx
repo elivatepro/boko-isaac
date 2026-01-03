@@ -15,6 +15,7 @@ import { home, about, person, baseURL, routes, testimonials } from "@/resources"
 import { QuoteRequestForm, Testimonials } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
+import { fetchReviewSummary } from "@/utils/reviews";
 import styles from "./page.module.scss";
 
 export async function generateMetadata() {
@@ -27,7 +28,11 @@ export async function generateMetadata() {
   });
 }
 
-export default function Home() {
+export const revalidate = 0;
+
+export default async function Home() {
+  const { reviews, overallRating, totalReviews } = await fetchReviewSummary();
+
   return (
     <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
       <Schema
@@ -158,9 +163,9 @@ export default function Home() {
             {testimonials.title}
           </Heading>
           <Testimonials
-            testimonials={testimonials.items}
-            overallRating={testimonials.overallRating}
-            totalReviews={testimonials.totalReviews}
+            testimonials={reviews}
+            overallRating={overallRating}
+            totalReviews={totalReviews}
           />
         </Column>
       )}
