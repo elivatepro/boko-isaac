@@ -6,10 +6,11 @@ import { getSupabaseClient, isSupabaseConfigured } from "@/utils/supabaseClient"
 
 const blogsDir = path.join(process.cwd(), "src", "app", "blog", "posts");
 
-function ensureDir() {
-  if (!fs.existsSync(blogsDir)) {
-    throw new Error("Blog posts directory not found");
+function ensureDir(): boolean {
+  if (fs.existsSync(blogsDir)) {
+    return true;
   }
+  return false;
 }
 
 function mapRowToBlog(row: Database["public"]["Tables"]["blogs"]["Row"]): BlogPost {
@@ -28,7 +29,7 @@ function mapRowToBlog(row: Database["public"]["Tables"]["blogs"]["Row"]): BlogPo
 }
 
 function fileBlogPosts(): BlogPost[] {
-  ensureDir();
+  if (!ensureDir()) return [];
   const files = fs.readdirSync(blogsDir).filter((f) => f.endsWith(".mdx"));
   const posts = files.map((file) => {
     const filePath = path.join(blogsDir, file);
@@ -52,7 +53,7 @@ function fileBlogPosts(): BlogPost[] {
 }
 
 function fileBlogPost(slug: string): BlogPost | null {
-  ensureDir();
+  if (!ensureDir()) return null;
   const filePath = path.join(blogsDir, `${slug}.mdx`);
   if (!fs.existsSync(filePath)) return null;
   const raw = fs.readFileSync(filePath, "utf-8");
@@ -70,7 +71,9 @@ function fileBlogPost(slug: string): BlogPost | null {
 }
 
 function createFileBlog(post: BlogPost): BlogPost {
-  ensureDir();
+  if (!ensureDir()) {
+    fs.mkdirSync(blogsDir, { recursive: true });
+  }
   const filePath = path.join(blogsDir, `${post.slug}.mdx`);
   if (fs.existsSync(filePath)) {
     throw new Error("A blog post with this slug already exists");
@@ -88,7 +91,9 @@ function createFileBlog(post: BlogPost): BlogPost {
 }
 
 function updateFileBlog(slug: string, payload: Partial<BlogPost>): BlogPost {
-  ensureDir();
+  if (!ensureDir()) {
+    throw new Error("Blog post not found");
+  }
   const filePath = path.join(blogsDir, `${slug}.mdx`);
   if (!fs.existsSync(filePath)) {
     throw new Error("Blog post not found");

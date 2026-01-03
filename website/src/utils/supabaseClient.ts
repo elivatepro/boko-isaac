@@ -8,9 +8,10 @@ declare global {
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export function isSupabaseConfigured(): boolean {
-  return Boolean(supabaseUrl && supabaseServiceRoleKey);
+  return Boolean(supabaseUrl && (supabaseServiceRoleKey || supabaseAnonKey));
 }
 
 export function getSupabaseClient(): SupabaseClient<any> {
@@ -19,7 +20,8 @@ export function getSupabaseClient(): SupabaseClient<any> {
   }
 
   if (!global._supabaseClient) {
-    global._supabaseClient = createClient<Database>(supabaseUrl!, supabaseServiceRoleKey!, {
+    const key = supabaseServiceRoleKey || supabaseAnonKey!;
+    global._supabaseClient = createClient<Database>(supabaseUrl!, key, {
       auth: {
         autoRefreshToken: false,
         persistSession: false,

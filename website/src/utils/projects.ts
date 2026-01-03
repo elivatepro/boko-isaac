@@ -124,6 +124,9 @@ function toDatabasePayload(payload: NormalizedProjectPayload): Database["public"
 }
 
 function getFilesystemProjects(): Project[] {
+  const projectsPath = path.join(process.cwd(), "src", "app", "work", "projects");
+  if (!fs.existsSync(projectsPath)) return [];
+
   const posts = getPosts(["src", "app", "work", "projects"]);
   const projects = posts.map(mapMdxPostToProject);
   return projects.sort(
