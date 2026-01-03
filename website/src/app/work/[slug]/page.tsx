@@ -17,6 +17,7 @@ import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
+import { BlogBlueprintCTA } from "@/components/blog/BlogBlueprintCTA";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -123,6 +124,9 @@ export default async function Project({
       )}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
         <CustomMDX source={project.content} />
+      </Column>
+      <Column fillWidth marginTop="40">
+        <BlogBlueprintCTA variant="project" />
       </Column>
       <Column fillWidth gap="40" horizontal="center" marginTop="40">
         <Line maxWidth="40" />

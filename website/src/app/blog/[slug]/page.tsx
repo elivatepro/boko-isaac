@@ -20,6 +20,7 @@ import { Metadata } from "next";
 import React from "react";
 import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
+import { BlogBlueprintCTA } from "@/components/blog/BlogBlueprintCTA";
 import { fetchBlogPost, fetchBlogPosts } from "@/utils/blogs";
 
 export const dynamic = "force-dynamic";
@@ -133,6 +134,10 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
           </Column>
 
           <ShareSection title={post.title} url={`${baseURL}${blog.path}/${post.slug}`} />
+
+          <Column fillWidth marginTop="40">
+            <BlogBlueprintCTA variant="blog" />
+          </Column>
 
           <Column fillWidth gap="40" horizontal="center" marginTop="40">
             <Line maxWidth="40" />
