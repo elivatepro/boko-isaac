@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { fetchProjectBySlug, fetchProjects } from "@/utils/projects";
 import {
-  Meta,
   Schema,
   AvatarGroup,
   Column,
@@ -44,13 +43,33 @@ export async function generateMetadata({
 
   if (!project) return {};
 
-  return Meta.generate({
+  const ogImage = project.image || `${baseURL}/api/og/generate?title=${encodeURIComponent(project.title)}`;
+  const pageUrl = `${baseURL}${work.path}/${project.slug}`;
+
+  return {
     title: project.title,
     description: project.summary,
-    baseURL: baseURL,
-    image: project.image || `/api/og/generate?title=${encodeURIComponent(project.title)}`,
-    path: `${work.path}/${project.slug}`,
-  });
+    openGraph: {
+      title: project.title,
+      description: project.summary,
+      url: pageUrl,
+      type: "article",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.summary,
+      images: [ogImage],
+    },
+  };
 }
 
 export default async function Project({

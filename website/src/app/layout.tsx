@@ -33,6 +33,27 @@ export async function generateMetadata() {
       shortcut: "/images/boko-avatar-new.png",
       apple: "/images/boko-avatar-new.png",
     },
+    openGraph: {
+      title: home.title,
+      description: home.description,
+      url: baseURL,
+      siteName: home.title,
+      images: [
+        {
+          url: home.image,
+          width: 1200,
+          height: 630,
+          alt: home.title,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: home.title,
+      description: home.description,
+      images: [home.image],
+    },
   };
 }
 

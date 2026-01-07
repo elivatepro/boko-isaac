@@ -1,12 +1,10 @@
 import { notFound } from "next/navigation";
 import { CustomMDX, ScrollToHash } from "@/components";
 import {
-  Meta,
   Schema,
   Column,
   Heading,
   HeadingNav,
-  Icon,
   Row,
   Text,
   SmartLink,
@@ -48,13 +46,33 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return Meta.generate({
+  const ogImage = post.image || `${baseURL}/api/og/generate?title=${encodeURIComponent(post.title)}`;
+  const pageUrl = `${baseURL}${blog.path}/${post.slug}`;
+
+  return {
     title: post.title,
     description: post.summary,
-    baseURL: baseURL,
-    image: post.image || `/api/og/generate?title=${encodeURIComponent(post.title)}`,
-    path: `${blog.path}/${post.slug}`,
-  });
+    openGraph: {
+      title: post.title,
+      description: post.summary,
+      url: pageUrl,
+      type: "article",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+      images: [ogImage],
+    },
+  };
 }
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {
