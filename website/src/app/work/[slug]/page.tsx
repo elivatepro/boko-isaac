@@ -48,7 +48,7 @@ export async function generateMetadata({
     title: project.title,
     description: project.summary,
     baseURL: baseURL,
-    image: project.image || `/api/og/generate?title=${project.title}`,
+    image: project.image || `/api/og/generate?title=${encodeURIComponent(project.title)}`,
     path: `${work.path}/${project.slug}`,
   });
 }

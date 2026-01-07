@@ -52,7 +52,7 @@ export async function generateMetadata({
     title: post.title,
     description: post.summary,
     baseURL: baseURL,
-    image: post.image || `/api/og/generate?title=${post.title}`,
+    image: post.image || `/api/og/generate?title=${encodeURIComponent(post.title)}`,
     path: `${blog.path}/${post.slug}`,
   });
 }

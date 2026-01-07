@@ -60,7 +60,7 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: "/images/og/home.jpg",
+  image: "https://j4bqjy3d7r0d8bl9.public.blob.vercel-storage.com/The%20Only%20Developer%20You%E2%80%99ll%20Ever%20Need.png",
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
