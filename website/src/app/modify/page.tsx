@@ -107,14 +107,18 @@ export default function ModifyPage() {
     avatar: "",
   });
 
+  // Slugify for live typing - preserves trailing dash so users can type spaces
   const slugify = (value: string) =>
     value
       .toLowerCase()
-      .trim()
       .replace(/\s+/g, "-") // spaces -> hyphen
       .replace(/[^a-z0-9-]/g, "") // drop other symbols
       .replace(/-+/g, "-") // collapse multiple hyphens
-      .replace(/^-+|-+$/g, ""); // trim hyphens from ends
+      .replace(/^-+/, ""); // only trim leading hyphens, keep trailing for typing
+
+  // Final slugify for submission - trims both ends
+  const finalizeSlug = (value: string) =>
+    slugify(value).replace(/-+$/g, ""); // trim trailing hyphens
 
   const autoSetSlug = (value: string, type: ContentType) => {
     const nextSlug = slugify(value);
@@ -304,6 +308,8 @@ export default function ModifyPage() {
 
     try {
       if (contentType === "projects") {
+        // Finalize slug before saving (trim trailing dashes)
+        const finalForm = { ...projectForm, slug: finalizeSlug(projectForm.slug) };
         const endpoint =
           view === "new" ? "/api/modify/projects" : `/api/modify/projects/${currentProject?.slug}`;
         const method = view === "new" ? "POST" : "PUT";
@@ -311,7 +317,7 @@ export default function ModifyPage() {
         const res = await fetch(endpoint, {
           method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(projectForm),
+          body: JSON.stringify(finalForm),
         });
 
         if (res.ok) {
@@ -326,6 +332,8 @@ export default function ModifyPage() {
           setMessage({ type: "error", text: data.error || "Failed to save project" });
         }
       } else if (contentType === "blogs") {
+        // Finalize slug before saving (trim trailing dashes)
+        const finalForm = { ...blogForm, slug: finalizeSlug(blogForm.slug) };
         const endpoint =
           view === "new" ? "/api/modify/blogs" : `/api/modify/blogs/${currentBlog?.slug}`;
         const method = view === "new" ? "POST" : "PUT";
@@ -333,7 +341,7 @@ export default function ModifyPage() {
         const res = await fetch(endpoint, {
           method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(blogForm),
+          body: JSON.stringify(finalForm),
         });
 
         if (res.ok) {
@@ -348,6 +356,8 @@ export default function ModifyPage() {
           setMessage({ type: "error", text: data.error || "Failed to save blog post" });
         }
       } else {
+        // Finalize slug before saving (trim trailing dashes)
+        const finalForm = { ...reviewForm, slug: finalizeSlug(reviewForm.slug), rating: Number(reviewForm.rating) || 0 };
         const endpoint =
           view === "new" ? "/api/modify/reviews" : `/api/modify/reviews/${currentReview?.slug}`;
         const method = view === "new" ? "POST" : "PUT";
@@ -355,7 +365,7 @@ export default function ModifyPage() {
         const res = await fetch(endpoint, {
           method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...reviewForm, rating: Number(reviewForm.rating) || 0 }),
+          body: JSON.stringify(finalForm),
         });
 
         if (res.ok) {
