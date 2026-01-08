@@ -13,6 +13,8 @@ import {
   Icon,
   Media,
   ToggleButton,
+  IconButton,
+  Tag,
 } from "@once-ui-system/core";
 
 type ContentType = "projects" | "blogs" | "reviews";
@@ -70,6 +72,7 @@ export default function ModifyPage() {
   const fileInputRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
   const blogFileInputRef = useRef<HTMLInputElement>(null);
   const [showBlogImagePicker, setShowBlogImagePicker] = useState(false);
+  const [reordering, setReordering] = useState(false);
 
   // Project form state
   const [projectForm, setProjectForm] = useState({
@@ -468,6 +471,71 @@ export default function ModifyPage() {
     setShowBlogImagePicker(false);
   };
 
+  const handleMoveItem = async (index: number, direction: "up" | "down") => {
+    const currentItems = contentType === "projects" ? projects : contentType === "blogs" ? blogs : reviews;
+    if (
+      (direction === "up" && index === 0) ||
+      (direction === "down" && index === currentItems.length - 1)
+    ) {
+      return;
+    }
+
+    setReordering(true);
+    resetMessages();
+
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    const newItems = [...currentItems];
+    [newItems[index], newItems[newIndex]] = [newItems[newIndex], newItems[index]];
+
+    // Update local state immediately for responsive UI
+    if (contentType === "projects") {
+      setProjects(newItems as Project[]);
+    } else if (contentType === "blogs") {
+      setBlogs(newItems as BlogPost[]);
+    } else {
+      setReviews(newItems as Review[]);
+    }
+
+    // Save to database
+    try {
+      const orderData = newItems.map((item, idx) => ({
+        slug: item.slug,
+        order: idx,
+      }));
+
+      const res = await fetch("/api/modify/reorder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: contentType, items: orderData }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setMessage({ type: "error", text: data.error || "Failed to save order" });
+        // Revert on error
+        if (contentType === "projects") {
+          await fetchProjects();
+        } else if (contentType === "blogs") {
+          await fetchBlogs();
+        } else {
+          await fetchReviews();
+        }
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "Failed to save order" });
+      // Revert on error
+      if (contentType === "projects") {
+        await fetchProjects();
+      } else if (contentType === "blogs") {
+        await fetchBlogs();
+      } else {
+        await fetchReviews();
+      }
+    } finally {
+      setReordering(false);
+    }
+  };
+
   const handleBlogFileUpload = async (file: File) => {
     setUploading(0);
     resetMessages();
@@ -511,7 +579,7 @@ export default function ModifyPage() {
   if (view === "list") {
     return (
       <Column maxWidth="l" fillWidth gap="l" paddingY="xl">
-        <Row fillWidth horizontal="between" vertical="center">
+        <Column fillWidth gap="16">
           <Column gap="4">
             <Heading variant="display-strong-l">
               Manage{" "}
@@ -529,7 +597,7 @@ export default function ModifyPage() {
                   : "Add, edit, or delete your testimonials"}
             </Text>
           </Column>
-          <Row gap="8">
+          <Row gap="8" wrap>
             <ToggleButton
               label="Projects"
               value="projects"
@@ -552,7 +620,7 @@ export default function ModifyPage() {
               Add {contentType === "projects" ? "Project" : contentType === "blogs" ? "Post" : "Review"}
             </Button>
           </Row>
-        </Row>
+        </Column>
 
         {message && (
           <Row
@@ -569,7 +637,7 @@ export default function ModifyPage() {
         )}
 
         <Column fillWidth gap="12">
-          {items.map((item) => {
+          {items.map((item, index) => {
             const isProjectItem = contentType === "projects";
             const isBlogItem = contentType === "blogs";
             const reviewItem = item as Review;
@@ -586,33 +654,86 @@ export default function ModifyPage() {
             const meta = isProjectItem || isBlogItem
               ? `Published: ${(item as Project | BlogPost).publishedAt}`
               : `Rating: ${reviewItem.rating}/5${reviewItem.company ? ` · ${reviewItem.company}` : ""}`;
+            const isFirst = index === 0;
+            const isLast = index === items.length - 1;
 
             return (
-              <Row
+              <Column
                 key={item.slug}
                 fillWidth
                 padding="20"
                 radius="l"
                 border="neutral-alpha-weak"
                 background="surface"
-                horizontal="between"
-                vertical="center"
-                gap="16"
+                gap="12"
               >
-                <Column gap="4" style={{ flex: 1 }}>
-                  <Text variant="heading-strong-m">{title}</Text>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
-                    {summary && summary.length > 100 ? summary.substring(0, 100) + "..." : summary}
-                  </Text>
-                  <Text variant="label-default-xs" onBackground="neutral-weak">
-                    {meta}
-                  </Text>
-                </Column>
-                <Row gap="8">
+                <Row fillWidth horizontal="between" vertical="start" gap="12">
+                  <Row gap="12" vertical="center" style={{ flex: 1, minWidth: 0 }}>
+                    {/* Reorder buttons */}
+                    <Column gap="4">
+                      <IconButton
+                        icon="chevronUp"
+                        size="s"
+                        variant="tertiary"
+                        onClick={() => handleMoveItem(index, "up")}
+                        disabled={isFirst || reordering}
+                        tooltip="Move up"
+                      />
+                      <IconButton
+                        icon="chevronDown"
+                        size="s"
+                        variant="tertiary"
+                        onClick={() => handleMoveItem(index, "down")}
+                        disabled={isLast || reordering}
+                        tooltip="Move down"
+                      />
+                    </Column>
+                    <Column gap="4" style={{ flex: 1, minWidth: 0 }}>
+                      <Row gap="8" vertical="center" wrap>
+                        <Text variant="heading-strong-m" style={{ wordBreak: "break-word" }}>{title}</Text>
+                        {isFirst && <Tag label="Featured" variant="success" size="s" />}
+                      </Row>
+                      <Text variant="body-default-s" onBackground="neutral-weak" style={{ wordBreak: "break-word" }}>
+                        {summary && summary.length > 100 ? summary.substring(0, 100) + "..." : summary}
+                      </Text>
+                      <Text variant="label-default-xs" onBackground="neutral-weak">
+                        {meta}
+                      </Text>
+                    </Column>
+                  </Row>
+                  {/* Desktop buttons - hidden on mobile */}
+                  <Row gap="8" className="hide-on-mobile" style={{ flexShrink: 0 }}>
+                    <Button
+                      variant="secondary"
+                      size="s"
+                      prefixIcon="edit"
+                      onClick={() =>
+                        contentType === "projects"
+                          ? handleEditProject(item as Project)
+                          : contentType === "blogs"
+                            ? handleEditBlog(item as BlogPost)
+                            : handleEditReview(item as Review)
+                      }
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size="s"
+                      prefixIcon="trash"
+                      onClick={() => handleDelete(item.slug)}
+                    >
+                      Delete
+                    </Button>
+                  </Row>
+                </Row>
+                {/* Mobile buttons - shown only on mobile */}
+                <Row gap="8" fillWidth className="show-on-mobile" style={{ display: "none" }}>
                   <Button
                     variant="secondary"
                     size="s"
                     prefixIcon="edit"
+                    style={{ flex: 1 }}
                     onClick={() =>
                       contentType === "projects"
                         ? handleEditProject(item as Project)
@@ -627,12 +748,13 @@ export default function ModifyPage() {
                     variant="danger"
                     size="s"
                     prefixIcon="trash"
+                    style={{ flex: 1 }}
                     onClick={() => handleDelete(item.slug)}
                   >
                     Delete
                   </Button>
                 </Row>
-              </Row>
+              </Column>
             );
           })}
 
@@ -662,7 +784,7 @@ export default function ModifyPage() {
 
   return (
     <Column maxWidth="l" fillWidth gap="l" paddingY="xl">
-      <Row fillWidth horizontal="between" vertical="center">
+      <Column fillWidth gap="16">
         <Column gap="4">
           <Heading variant="display-strong-l">
             {view === "new"
@@ -681,7 +803,7 @@ export default function ModifyPage() {
                 }`}
           </Text>
         </Column>
-        <Row gap="8">
+        <Row gap="8" wrap>
           <ToggleButton
             label="Projects"
             value="projects"
@@ -701,10 +823,10 @@ export default function ModifyPage() {
             onClick={() => handleSwitchType("reviews")}
           />
           <Button onClick={() => setView("list")} variant="secondary" prefixIcon="arrowLeft">
-            Back to List
+            Back
           </Button>
         </Row>
-      </Row>
+      </Column>
 
       {message && (
         <Row

@@ -78,6 +78,7 @@ function mapRowToProject(row: Database["public"]["Tables"]["projects"]["Row"]): 
     image: row.image ?? row.images?.[0],
     createdAt: row.created_at ?? undefined,
     updatedAt: row.updated_at ?? undefined,
+    displayOrder: row.display_order ?? undefined,
   };
 }
 
@@ -201,16 +202,27 @@ function deleteFilesystemProject(slug: string) {
 export async function fetchProjects(): Promise<Project[]> {
   if (isSupabaseConfigured()) {
     const supabase = getSupabaseClient();
-    const { data, error } = await supabase
+
+    // Try with display_order first, fallback to just published_at if column doesn't exist
+    let result = await supabase
       .from("projects")
       .select("*")
+      .order("display_order", { ascending: true, nullsFirst: false })
       .order("published_at", { ascending: false });
 
-    if (error) {
-      throw new Error(`Failed to fetch projects from Supabase: ${error.message}`);
+    // If display_order column doesn't exist, retry without it
+    if (result.error?.message?.includes("display_order")) {
+      result = await supabase
+        .from("projects")
+        .select("*")
+        .order("published_at", { ascending: false });
     }
 
-    return (data || []).map(mapRowToProject);
+    if (result.error) {
+      throw new Error(`Failed to fetch projects from Supabase: ${result.error.message}`);
+    }
+
+    return (result.data || []).map(mapRowToProject);
   }
 
   return getFilesystemProjects();
@@ -333,5 +345,26 @@ export async function deleteProject(
 
   if (!count) {
     throw new Error(`Project not found: ${slug || "(missing slug)"}`);
+  }
+}
+
+export async function updateProjectsOrder(
+  items: { slug: string; order: number }[],
+): Promise<void> {
+  if (!isSupabaseConfigured()) {
+    throw new Error("Supabase is not configured. Reordering requires database storage.");
+  }
+
+  const supabase = getSupabaseClient();
+
+  for (const item of items) {
+    const { error } = await supabase
+      .from("projects")
+      .update({ display_order: item.order } as any)
+      .eq("slug", item.slug);
+
+    if (error) {
+      throw new Error(`Failed to update order for project ${item.slug}: ${error.message}`);
+    }
   }
 }

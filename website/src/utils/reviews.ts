@@ -66,6 +66,7 @@ function mapRowToReview(row: Database["public"]["Tables"]["reviews"]["Row"]): Re
     avatar: row.avatar ?? undefined,
     createdAt: row.created_at ?? undefined,
     updatedAt: row.updated_at ?? undefined,
+    displayOrder: row.display_order ?? undefined,
   };
 }
 
@@ -84,16 +85,27 @@ function toDatabasePayload(payload: NormalizedReviewPayload): Database["public"]
 export async function fetchReviews(): Promise<Review[]> {
   if (isSupabaseConfigured()) {
     const supabase = getSupabaseClient();
-    const { data, error } = await supabase
+
+    // Try with display_order first, fallback to just created_at if column doesn't exist
+    let result = await supabase
       .from("reviews")
       .select("*")
+      .order("display_order", { ascending: true, nullsFirst: false })
       .order("created_at", { ascending: false });
 
-    if (error) {
-      throw new Error(`Failed to fetch reviews from Supabase: ${error.message}`);
+    // If display_order column doesn't exist, retry without it
+    if (result.error?.message?.includes("display_order")) {
+      result = await supabase
+        .from("reviews")
+        .select("*")
+        .order("created_at", { ascending: false });
     }
 
-    return (data || []).map(mapRowToReview);
+    if (result.error) {
+      throw new Error(`Failed to fetch reviews from Supabase: ${result.error.message}`);
+    }
+
+    return (result.data || []).map(mapRowToReview);
   }
 
   // Fallback to bundled testimonials content when Supabase is not configured
@@ -230,4 +242,25 @@ export async function fetchReviewSummary() {
     overallRating: Number.isFinite(overallRating) ? overallRating : 0,
     totalReviews,
   };
+}
+
+export async function updateReviewsOrder(
+  items: { slug: string; order: number }[],
+): Promise<void> {
+  if (!isSupabaseConfigured()) {
+    throw new Error("Supabase is not configured. Reordering requires database storage.");
+  }
+
+  const supabase = getSupabaseClient();
+
+  for (const item of items) {
+    const { error } = await supabase
+      .from("reviews")
+      .update({ display_order: item.order } as any)
+      .eq("slug", item.slug);
+
+    if (error) {
+      throw new Error(`Failed to update order for review ${item.slug}: ${error.message}`);
+    }
+  }
 }

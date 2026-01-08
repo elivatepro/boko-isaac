@@ -8,4 +8,5 @@ export type Review = {
   avatar?: string;
   createdAt?: string;
   updatedAt?: string;
+  displayOrder?: number;
 };

@@ -17,6 +17,7 @@ export type Project = {
   image?: string;
   createdAt?: string;
   updatedAt?: string;
+  displayOrder?: number;
 };
 
 export type ProjectPayload = {

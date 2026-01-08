@@ -9,4 +9,5 @@ export type BlogPost = {
   content: string;
   createdAt?: string;
   updatedAt?: string;
+  displayOrder?: number;
 };

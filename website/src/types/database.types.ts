@@ -25,6 +25,7 @@ export type Database = {
           image: string | null;
           created_at: string | null;
           updated_at: string | null;
+          display_order: number | null;
         };
         Insert: {
           id?: string;
@@ -39,6 +40,7 @@ export type Database = {
           image?: string | null;
           created_at?: string | null;
           updated_at?: string | null;
+          display_order?: number | null;
         };
         Update: {
           id?: string;
@@ -53,6 +55,7 @@ export type Database = {
           image?: string | null;
           created_at?: string | null;
           updated_at?: string | null;
+          display_order?: number | null;
         };
       };
       blogs: {
@@ -68,6 +71,7 @@ export type Database = {
           tag: string | null;
           created_at: string | null;
           updated_at: string | null;
+          display_order: number | null;
         };
         Insert: {
           id?: string;
@@ -81,6 +85,7 @@ export type Database = {
           tag?: string | null;
           created_at?: string | null;
           updated_at?: string | null;
+          display_order?: number | null;
         };
         Update: {
           id?: string;
@@ -94,6 +99,7 @@ export type Database = {
           tag?: string | null;
           created_at?: string | null;
           updated_at?: string | null;
+          display_order?: number | null;
         };
       };
       reviews: {
@@ -108,6 +114,7 @@ export type Database = {
           avatar: string | null;
           created_at: string | null;
           updated_at: string | null;
+          display_order: number | null;
         };
         Insert: {
           id?: string;
@@ -120,6 +127,7 @@ export type Database = {
           avatar?: string | null;
           created_at?: string | null;
           updated_at?: string | null;
+          display_order?: number | null;
         };
         Update: {
           id?: string;
@@ -132,6 +140,7 @@ export type Database = {
           avatar?: string | null;
           created_at?: string | null;
           updated_at?: string | null;
+          display_order?: number | null;
         };
       };
     };
